@@ -9,7 +9,8 @@ int main()
 {
 
     //cout << dp_commonSubsequence();
-    dp_increaseSubsequence();
+    //dp_increaseSubsequence();
+    dp_stealhouse();
 
     return 0;
 }

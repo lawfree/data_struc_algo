@@ -10,6 +10,6 @@
 int dp_commonSubsequence();
 int dp_increaseSubsequence();
 int dp_increaseSubsequence_1();
-
+int dp_stealhouse();
 
 #endif // DP_1_METHODS_H
