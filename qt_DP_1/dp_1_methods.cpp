@@ -3,21 +3,21 @@
 using namespace std  ;
 
 /*
-    能用动规解决的问题的特点
+    ���ö�������������ص�
 
-        1) 问题具有最优子结构性质。
-            如果问题的最优解所包含的子问题的解也是最优的，我们就称该问题具有最优子结构性质。
+        1) ������������ӽṹ���ʡ�
+            �����������Ž���������������Ľ�Ҳ�����ŵģ����ǾͳƸ�������������ӽṹ���ʡ�
 
-        2) 无后效性。
-            当前的若干个状态值一旦确定，则此后过程的演变就只和这若干个状态的值有关，和之前是采取哪种手段或经过哪条路径演变到当前的这若干个状态，没有关系。
+        2) �޺�Ч�ԡ�
+            ��ǰ�����ɸ�״ֵ̬һ��ȷ������˺���̵��ݱ��ֻ�������ɸ�״̬��ֵ�йأ���֮ǰ�ǲ�ȡ�����ֶλ򾭹�����·���ݱ䵽��ǰ�������ɸ�״̬��û�й�ϵ��
 */
 
 
 /*
 
- 最长公共子序列（POJ1458)
+ ����������У�POJ1458)
 
-    给出两个字符串，求出这样的一个最长的公共子序列的长度：子序列中的每个字符都能在两个原串中找到， 而且每个字符的先后顺序和原串中的先后顺序一致。
+    ���������ַ��������������һ����Ĺ��������еĳ��ȣ��������е�ÿ���ַ�����������ԭ�����ҵ��� ����ÿ���ַ����Ⱥ�˳���ԭ���е��Ⱥ�˳��һ�¡�
 
     Sample Input
 
@@ -37,16 +37,16 @@ using namespace std  ;
 */
 
 /*
-解题思路：
-设输入的两个串为s1,s2,
-设MaxLen(i,j)表示:：s1的左边i个字符形成的子串，与s2左边的j个字符形成的子串的最长公共子序列的长度(i,j从0 开始算），则MaxLen(i,j) 就是本题的“状态”
-假定 len1 = strlen(s1),len2 = strlen(s2），那么题目就是要求   MaxLen(len1,len2)
+����˼·��
+�������������Ϊs1,s2,
+��MaxLen(i,j)��ʾ:��s1�����i���ַ��γɵ��Ӵ�����s2��ߵ�j���ַ��γɵ��Ӵ�������������еĳ���(i,j��0 ��ʼ�㣩����MaxLen(i,j) ���Ǳ���ġ�״̬��
+�ٶ� len1 = strlen(s1),len2 = strlen(s2������ô��Ŀ����Ҫ��   MaxLen(len1,len2)
 
-显然：
-    MaxLen(n,0)  = 0  ( n= 0…len1）
-    MaxLen(0,n)  = 0  ( n=0…len2）
+��Ȼ��
+    MaxLen(n,0)  = 0  ( n= 0��len1��
+    MaxLen(0,n)  = 0  ( n=0��len2��
 
-于是，我们可以得到如下的递推公式：
+���ǣ����ǿ��Եõ����µĵ��ƹ�ʽ��
                 if( s1[i - 1] == s2[ j - 1])
                     MaxLen(i,j) = MaxLen(i-1,j-1) + 1;
                 else
@@ -86,68 +86,68 @@ int dp_commonSubsequence(){
 
 
 /*
-最长上升子序列(百练2757)
+�����������(����2757)
 
-一个数的序列ai，当a1 < a2 < ... < aS的时候，我们称这个序列是上升的。对于给定的一个序列(a1, a2, ..., aN)，我们可以得到一些上升的子序列(ai1, ai2, ..., aiK)，
-这里1 <= i1 < i2 < ... < iK <= N。
-比如，对于序列(1, 7, 3, 5, 9, 4, 8)， 有它的一些上升子序列，如(1, 7), (3, 4, 8)等等。这些子序列中最长的长度是4，比如子序列(1, 3, 5, 8).。
-你的任务，就是对于给定的序列，求出最长上升子序列的长度。
+һ����������ai����a1 < a2 < ... < aS��ʱ�����ǳ���������������ġ����ڸ�����һ������(a1, a2, ..., aN)�����ǿ��Եõ�һЩ������������(ai1, ai2, ..., aiK)��
+����1 <= i1 < i2 < ... < iK <= N��
+���磬��������(1, 7, 3, 5, 9, 4, 8)�� ������һЩ���������У���(1, 7), (3, 4, 8)�ȵȡ���Щ����������ĳ�����4������������(1, 3, 5, 8).��
+������񣬾��Ƕ��ڸ��������У��������������еĳ��ȡ�
 
-输入数据
-    输入的第一行是序列的长度N (1 <= N <= 1000)。第二行给出序列中的N个整数，这些整数的取值范围都在0到10000。
+��������
+    ����ĵ�һ�������еĳ���N (1 <= N <= 1000)���ڶ��и��������е�N����������Щ������ȡֵ��Χ����0��10000��
 
-输出要求
-    最长上升子序列的长度。
+���Ҫ��
+    ����������еĳ��ȡ�
 
-输入样例
+��������
 
     7
 
     1 7 3 5 9 4 8
 
-输出样例
+�������
 
     4
 
 */
 
 /*
-解题思路
+����˼·
 
-1.找子问题
+1.��������
 
-    “求序列的前n个元素的最长上升子序列的长度”是个子问题，但这样分解子问题，不具有“无后效性”，因为假设F(n) = x,但可能有多个序列满足F(n) = x。
-    有的序列的最后一个元素比 an+1小，则加上an+1就能形成更长上 升子序列；
-    有的序列最后一个元素不比an+1小……以后的事情受如何达到状态n的影响，不符合“无后效性” ，因此我们必须换一种思路来解决此问题。
+    �������е�ǰn��Ԫ�ص�����������еĳ��ȡ��Ǹ������⣬�������ֽ������⣬�����С��޺�Ч�ԡ�����Ϊ����F(n) = x,�������ж����������F(n) = x��
+    �е����е����һ��Ԫ�ر� an+1С�������an+1�����γɸ����� �������У�
+    �е��������һ��Ԫ�ز���an+1С�����Ժ����������δﵽ״̬n��Ӱ�죬�����ϡ��޺�Ч�ԡ� ��������Ǳ��뻻һ��˼·����������⡣
 
-    “求以ak（k=1, 2, 3…N）为终点的最长上升子序列的长度”，一个上升子序列中最右边的那个数，称为该子序列的 “终点”。
-    虽然这个子问题和原问题形式上并不完全一样，但是只要这N个子问题都解决了，那么这N个子问题的解中， 最大的那个就是整个问题的解。
+    ������ak��k=1, 2, 3��N��Ϊ�յ������������еĳ��ȡ���һ�����������������ұߵ��Ǹ�������Ϊ�������е� ���յ㡱��
+    ��Ȼ����������ԭ������ʽ�ϲ�����ȫһ��������ֻҪ��N�������ⶼ����ˣ���ô��N��������Ľ��У� �����Ǹ�������������Ľ⡣
 
-2.确定状态
+2.ȷ��״̬
 
-    子问题只和一个变量—— 数字的位置相关。因此序列中数的位置k就是“状态”，而状态 k 对应的“值”，就是以ak做为“终点”的最长上升子序列的长度。 状态一共有N个。
+    ������ֻ��һ���������� ���ֵ�λ����ء��������������λ��k���ǡ�״̬������״̬ k ��Ӧ�ġ�ֵ����������ak��Ϊ���յ㡱������������еĳ��ȡ� ״̬һ����N����
 
-3.找出状态转移方程
+3.�ҳ�״̬ת�Ʒ���
 
-     maxLen (k)表示以ak做为“终点”的最长上升子序列的长度
+     maxLen (k)��ʾ��ak��Ϊ���յ㡱������������еĳ���
 
-    那么：
+    ��ô��
 
-        初始状态：maxLen (1) = 1
+        ��ʼ״̬��maxLen (1) = 1
 
-        maxLen (k) = max { maxLen (i)：1<=i < k 且 ai < ak且 k≠1 } + 1       若找不到这样的i,则maxLen(k) = 1
+        maxLen (k) = max { maxLen (i)��1<=i < k �� ai < ak�� k��1 } + 1       ���Ҳ���������i,��maxLen(k) = 1
 
-        maxLen(k)的值，就是在ak左边，“终点”数值小于ak ，且长度最大的那个上升子序列的长度再加1。因为ak左边任何“终点”小于ak的子序列，加上ak后就能形成一个更长的上升子序列。
+        maxLen(k)��ֵ��������ak��ߣ����յ㡱��ֵС��ak ���ҳ��������Ǹ����������еĳ����ټ�1����Ϊak����κΡ��յ㡱С��ak�������У�����ak������γ�һ�����������������С�
 
 */
 
 
 /*
-有了这个思路，我们就可以很轻松地写出代码了。然而，即使到了这里，我们依然还能从两个方向解决这道题，
-我们可以将它们分别称为“人人为我”递推型动归和“我为人人”递推型动归
+�������˼·�����ǾͿ��Ժ����ɵ�д�������ˡ�Ȼ������ʹ�������������Ȼ���ܴ���������������⣬
+���ǿ��Խ����Ƿֱ��Ϊ������Ϊ�ҡ������Ͷ���͡���Ϊ���ˡ������Ͷ���
 
-“人人为我”递推型动归
-    状态i的值Fi由若干个值 已知的状态值Fk,Fm,..Fy 推出，如求和，取最大值
+������Ϊ�ҡ������Ͷ���
+    ״̬i��ֵFi�����ɸ�ֵ ��֪��״ֵ̬Fk,Fm,..Fy �Ƴ�������ͣ�ȡ���ֵ
 */
 int dp_increaseSubsequence(){
     int a[101];         /*save original datas*/
@@ -170,8 +170,8 @@ int dp_increaseSubsequence(){
 }
 
 /*
-“我为人人”递推型动归
-    状态i的值Fi在被更新（不一定是 最终求出）的时候，依据Fi去更 新（不一定是最终求出）和状态i 相关的其他一些状态的值 Fk,Fm,..Fy
+����Ϊ���ˡ������Ͷ���
+    ״̬i��ֵFi�ڱ����£���һ���� �����������ʱ������Fiȥ�� �£���һ���������������״̬i ��ص�����һЩ״̬��ֵ Fk,Fm,..Fy
 */
 int dp_increaseSubsequence_1(){
 
@@ -195,45 +195,48 @@ int dp_increaseSubsequence_1(){
 }
 
 /*
-动规的三种形式
+�����������ʽ
 
-1）记忆递归型
-    优点：只经过有用的状态，没有浪费。递推型会查看一些 没用的状态，有浪费。
-    缺点：可能会因递归层数太深导致栈溢出，函数调用带来额外时间开销。总体来说，比递推型慢。
+1������ݹ���
+    �ŵ㣺ֻ�������õ�״̬��û���˷ѡ������ͻ�鿴һЩ û�õ�״̬�����˷ѡ�
+    ȱ�㣺���ܻ���ݹ����̫���ջ������������ô�������ʱ�俪����������˵���ȵ���������
 
-2) “我为人人”递推型
-    没有什么明显的优势，有时比较符合思考的习惯。个别特殊题目中会比“人人为我”型节省空间。
+2) ����Ϊ���ˡ�������
+    û��ʲô���Ե����ƣ���ʱ�ȽϷ���˼����ϰ�ߡ�����������Ŀ�л�ȡ�����Ϊ�ҡ��ͽ�ʡ�ռ䡣
 
-3）“人人为我”递推型
-    在选取最优备选状态的值Fm,Fn,…Fy时， 有可能有好的算法或数据结构可以用来显 著降低时间复杂度。﻿﻿
+3��������Ϊ�ҡ�������
+    ��ѡȡ���ű�ѡ״̬��ֵFm,Fn,��Fyʱ�� �п����кõ��㷨�����ݽṹ���������� ������ʱ�临�Ӷȡ�
 */
 
 
 /*
-2019-7-17练习
+2019-7-17��ϰ
 
-你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，
-如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+����һ��רҵ��С͵���ƻ�͵���ؽֵķ��ݡ�ÿ�䷿�ڶ�����һ�����ֽ�Ӱ����͵�Ե�Ψһ��Լ���ؾ������ڵķ���װ���໥��ͨ�ķ���ϵͳ��
+����������ڵķ�����ͬһ���ϱ�С͵���룬ϵͳ���Զ�������
 
-给定一个代表每个房屋存放金额的非负整数数组，计算你在不触动警报装置的情况下，能够偷窃到的最高金额。
+����һ������ÿ�����ݴ�Ž��ķǸ��������飬�������ڲ���������װ�õ�����£��ܹ�͵�Ե�����߽�
 
-示例 1:
+ʾ�� 1:
 
-    输入: [1,2,3,1]
-    输出: 4
-解释: 偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
-         偷窃到的最高金额 = 1 + 3 = 4 。
+    ����: [1,2,3,1]
+    ���: 4
+����: ͵�� 1 �ŷ��� (��� = 1) ��Ȼ��͵�� 3 �ŷ��� (��� = 3)��
+         ͵�Ե�����߽�� = 1 + 3 = 4 ��
 
-示例 2:
+ʾ�� 2:
 
-    输入: [2,7,9,3,1]
-    输出: 12
-解释: 偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。
-         偷窃到的最高金额 = 2 + 9 + 1 = 12 。
+    ����: [2,7,9,3,1]
+    ���: 12
+����: ͵�� 1 �ŷ��� (��� = 2), ͵�� 3 �ŷ��� (��� = 9)������͵�� 5 �ŷ��� (��� = 1)��
+         ͵�Ե�����߽�� = 2 + 9 + 1 = 12 ��
 */
 int dp_stealhouse(){
-    int house[100];  //house[i] saves the amount of
+    int house[100];                 //house[i] saves the amount of
+    int max_value[100] = {0};       //max_value[100] saves the max value
+
     int i = 0;
+
 
     int len = 0;
     char ch;
@@ -241,13 +244,94 @@ int dp_stealhouse(){
     while (1) {
         cin >> house[i];
         //cout << house[i] << " ";
-        i++;
+        i++;len++;
         if(cin.get() == '\n')
             break;
     }
 
-    //TODO
+    /* boundary condition */
+    max_value[0] = house[0];
+    max_value[1] = std::max( house[1], house[0]);
 
+    /* equation of state transition */
+    for(i = 2; i < len ; i++)
+        max_value[i] = std::max(max_value[i-1], max_value[i-2] + house[i]);
 
+    cout << max_value[len-1];
     return 0;
+}
+
+/*
+Maximum continuous subsequence
+
+    Given a sequence of K integers { N1,N2, ... ,NK },
+    any contiguous subsequence can be expressed as { Ni,Ni+1, ...Nj },where 1<= i <= j <= K.
+
+    The largest contiguous subsequence is the element and the largest one of all consecutive subsequences.
+
+For example:
+    given a sequence { -211 -4 13 -5 -2 }, its largest contiguous subsequence is { 11 -4 13 }, the largest sumIs 20.
+
+Input:
+    The test input contains several test cases, each of which takes 2 lines.
+    The first line gives a positive integer K (< 10000 ), and the second line gives K integers separated by spaces.
+    When K is 0, the input ends and the use case is not processed.
+
+Output:
+    For each test case, the first and last elements of the largest and largest consecutive subsequences are output in one line,
+    separated by spaces. If the largest consecutive subsequence is not unique,
+    the one with the smallest sequence numbers i and j is output (as in groups 2 and 3 of the input sample).
+    If all K elements are negative, define their maximum sum to 0 and output the first and last elements of the entire sequence.
+
+Sample Input
+    6
+    -2 11 -4 13 -5 -2
+
+    10
+    -10 1 2 3 4 -5 -23 3 7  -21
+
+    6
+    5 -8 3 2 5 0
+
+    1
+    10
+
+    3
+    -1 -5 -2
+
+    3
+    -1 0 -2
+
+    0
+
+Sample Output
+
+    20 11 13
+
+    10 1 4
+
+    10 3 5
+
+    10 10 10
+
+    0 -1 -2
+
+    0 0 0
+*/
+int dp_maxcontinuousSubsequence(){
+    int len;
+    cin >> len;
+
+    int sequence[len];
+    for(int i = 0 ; i < len ; i++)
+        cin >> sequence[i];
+
+    for(int i = 0 ; i < len ; i++){
+        if (sequence[i] > 0) break;
+
+    }
+    if(i == len - 1){
+        //TODO
+    }
+
 }

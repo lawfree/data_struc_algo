@@ -11,5 +11,6 @@ int dp_commonSubsequence();
 int dp_increaseSubsequence();
 int dp_increaseSubsequence_1();
 int dp_stealhouse();
+int dp_maxcontinuousSubsequence();
 
 #endif // DP_1_METHODS_H
