@@ -86,7 +86,7 @@ int dp_commonSubsequence(){
 
 
 /*
-最长上升子序列(百练2757)
+最长上升子序列(百练2757) (LIS)
 
 一个数的序列ai，当a1 < a2 < ... < aS的时候，我们称这个序列是上升的。对于给定的一个序列(a1, a2, ..., aN)，我们可以得到一些上升的子序列(ai1, ai2, ..., aiK)，
 这里1 <= i1 < i2 < ... < iK <= N。
@@ -353,7 +353,7 @@ int dp_maxcontinuousSubsequence(){
     如何找到其状态描述和状态转移方程呢？
         考虑maxSeq[i] 表示前i个的最长连续子序列的和，但是，若第i+1个本身的值就比maxSeq[i]还要大，则maxSeq[i]得变化
             这是违背无后效性的（正常情况下找到了当前maxSeq[i]，那么后面的i+k对其是不会造成影响的）
-        考虑maxSeq[i] 表示以下标为i的元素作为最后最长子序列的结尾
+        考虑maxSeq[i] 表示以下标为i的元素作为最长子序列的结尾
             思考这样是否可行？
             最长连续子序列肯定是来自于所有这些元素的
             状态的转换就在于以i或i+1结尾
@@ -366,3 +366,134 @@ int dp_maxcontinuousSubsequence(){
 
         边界条件：maxSeq[0] = sequence[0]
 */
+
+
+
+/*
+最长递增子序列LIS (ZOJ 4028)
+
+给定一个长度为N的数组，找出一个最长的单调自增子序列（不一定连续，但是顺序不能乱）。
+例如：给定一个长度为6的数组A{5， 6， 7， 1， 2， 8}，则其最长的单调递增子序列为{5，6，7，8}，长度为4.
+
+(叠罗汉1)
+叠罗汉是一个著名的游戏，游戏中一个人要站在另一个人的肩膀上。同时我们应该让下面的人比上面的人更高一点。
+已知参加游戏的每个人的身高，请编写代码计算通过选择参与游戏的人，我们多能叠多少个人。注意这里的人都是先后到的，意味着参加游戏的人的先后顺序与原序列中的顺序应该一致。
+
+给定一个int数组men，代表依次来的每个人的身高。同时给定总人数n，请返回最多能叠的人数。保证n小于等于500。
+
+测试样例：
+
+    6
+    1 6 2 5 3 4
+
+返回：
+    4
+*/
+
+/*
+dp的约束在于，不一定连续，但是相邻两个一定是递增关系
+
+如何找到其状态描述和转移方程呢？
+    考虑long_inc_subseq[i]表示 以i为一个最长上升序列的最后一个元素 时的最长递增子序列的长度，此时该序列是动态变动的。
+    对于从０～i-1中的每一个元素long_inc_subseqp[j]
+        若sequence[j] < sequence[i]时
+            最长子序列长度不会变化
+        若sequence【j】> sequence[i]时
+            此时需要找到一个以sequence[i]结尾的最长序列即可，因此需要不断地对每一个j进行比较并加和
+            （之前一直想用O（n）将其化简都失败，原因在于不将0～i所有的比较完，是不能找到当前以sequence[i]的最长的子序列的）
+
+显然边界条件为第一个元素的LIS为1;
+*/
+int dp_LongestIncreaseSubsequence(){
+    int sequence[ 10 ];              //to save origin data
+    int long_incre_subseq[ 10 ];     //save each length of the long subseq
+
+
+    int len;
+    int res_len;                    //length of result sequence
+    cin >> len;
+
+    for (int i = 0 ; i < len ; i++){
+        cin >> sequence[i];
+        long_incre_subseq[i] = 1;
+    }
+
+    long_incre_subseq[0] = 1;
+    for ( int i = 1 ; i < len ; i++){
+
+        for(int j = 0 ; j < i ; j ++) {
+            if(sequence[i] > sequence[j])
+                long_incre_subseq[i] = std::max ( long_incre_subseq[i] , long_incre_subseq[j] + 1 );    //
+            else
+                long_incre_subseq[i] = long_incre_subseq[i - 1];
+
+        }
+
+    }
+
+   cout << * max_element( long_incre_subseq ,long_incre_subseq + len-1) << endl;
+
+    return 0;
+}
+
+
+
+
+
+/*
+最大连续子序列乘积
+
+给定一个浮点数序列（可能有正数、0和负数），求出一个最大的连续子序列乘积。
+
+Input Sample:
+    1 2 3 -1 2 4
+
+    2.5 4 -1.5 -2 -1 2
+
+    -1 -2 -3
+Output Sample:
+    8
+
+    30
+
+    6
+*/
+
+/*
+analyise
+
+考虑到乘积子序列中有正有负也还可能有0，我们可以把问题简化成这样：
+数组中找一个子序列，使得它的乘积最大；
+同时找一个子序列，使得它的乘积最小（负数的情况）。
+因为虽然我们只要一个最大积，但由于负数的存在，我们同时找这两个乘积做起来反而方便。也就是说，不但记录最大乘积，也要记录最小乘积。
+
+maxmul_subsequence[i]:以下标为i的数作为结尾的序列中乘积最大的子序列
+minmul_subsequence[i]:以下标为i的数作为结尾的序列中乘积最小的子序列
+
+
+*/
+int dp_max_mult_continuousSubsequence(){
+    int sequence[10];                                      //to save origin data
+    int maxmul_subsequence[10],minmul_subsequence[10] ;
+
+    int i = 0 , len =0;
+
+    /*save all origin datas*/
+    while(1){
+        cin >> sequence[i];
+        len ++; i++;
+        if ( cin.get() == '\n') break;
+    }
+
+    maxmul_subsequence[0] = sequence[0];
+    minmul_subsequence[0] = sequence[0];
+
+    for(i = 1 ; i < len ; i++){
+        maxmul_subsequence[i] = std :: max( sequence[i]  , std::max( sequence[i] * maxmul_subsequence[i - 1] , sequence[i] * minmul_subsequence[ i - 1 ] )  );
+        minmul_subsequence[i] = std :: min( sequence[i]  , std::min( sequence[i] * maxmul_subsequence[i - 1] , sequence[i] * minmul_subsequence[ i - 1 ] )  );
+    }
+
+    cout << maxmul_subsequence[len -1] << endl;
+    cout << minmul_subsequence[len -1] << endl;
+
+}
