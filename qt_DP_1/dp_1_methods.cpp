@@ -262,26 +262,12 @@ int dp_stealhouse(){
 }
 
 /*
+2019-7-18
 Maximum continuous subsequence
 
-    Given a sequence of K integers { N1,N2, ... ,NK },
-    any contiguous subsequence can be expressed as { Ni,Ni+1, ...Nj },where 1<= i <= j <= K.
-
-    The largest contiguous subsequence is the element and the largest one of all consecutive subsequences.
-
-For example:
-    given a sequence { -211 -4 13 -5 -2 }, its largest contiguous subsequence is { 11 -4 13 }, the largest sumIs 20.
-
-Input:
-    The test input contains several test cases, each of which takes 2 lines.
-    The first line gives a positive integer K (< 10000 ), and the second line gives K integers separated by spaces.
-    When K is 0, the input ends and the use case is not processed.
-
-Output:
-    For each test case, the first and last elements of the largest and largest consecutive subsequences are output in one line,
-    separated by spaces. If the largest consecutive subsequence is not unique,
-    the one with the smallest sequence numbers i and j is output (as in groups 2 and 3 of the input sample).
-    If all K elements are negative, define their maximum sum to 0 and output the first and last elements of the entire sequence.
+对于形如：int arr[] = { 1, -5, 3, 8, -9, 6 };的数组，求出它的最大连续子序列和。
+若数组中全部元素都是正数，则最大连续子序列和即是整个数组。
+若数组中全部元素都是负数，则最大连续子序列和即是空序列，最大和就是0。
 
 Sample Input
     6
@@ -306,32 +292,77 @@ Sample Input
 
 Sample Output
 
-    20 11 13
+    20
 
-    10 1 4
+    10
 
-    10 3 5
+    10
 
-    10 10 10
+    10
 
-    0 -1 -2
+    0
 
-    0 0 0
+    0
 */
+
 int dp_maxcontinuousSubsequence(){
     int len;
     cin >> len;
 
-    int sequence[len];
-    for(int i = 0 ; i < len ; i++)
+    int i ;
+    int sequence[len];              //sequence save the origin data
+    int maxcon_subsequence[len] ;   //maxcon_subsequence save the result
+    for( i = 0 ; i < len ; i++){
         cin >> sequence[i];
+        maxcon_subsequence[i] = 0;  //init the result array
+    }
 
-    for(int i = 0 ; i < len ; i++){
+    for( i = 0 ; i < len ; i++)
         if (sequence[i] > 0) break;
 
-    }
     if(i == len - 1){
-        //TODO
+        cout << 0 << endl;
+        return 0;
     }
 
+    /* boundary condition */
+    maxcon_subsequence[0] = sequence[0];
+
+    int max = maxcon_subsequence[0];    //save the max result right now
+    for(i = 1 ; i < len ; i++){
+        maxcon_subsequence[i] =std::max( sequence[i] , maxcon_subsequence[i-1] + sequence[i] );
+        if( maxcon_subsequence[i] > max ) max = maxcon_subsequence[i];
+    }
+
+    cout << max << endl;
 }
+/*
+对于打家劫舍问题：
+    dp的直接约束即在于不能直接相邻：选择了i，则i-1，i+1不能选择。
+    思考时这样思考：对于每一个i，要么选要么不选
+        若i选了，则i-1不能选，转化为i-2的情况，此时i-2也得讨论选或不选
+        若i不选，则将i的问题直接转化为i-1的问题，此时i-1也得讨论选或不选
+
+    由于有两种情况，对于每一个i，可用max函数挑选出选i或者不选i的较优值，将其放在数组中
+    然后对于边界条件：	i = 0 时即为本身
+                    i = 1 时比较自己和前一个大小
+
+
+对于最长连续子序列问题：
+    dp的直接约束在于选择了i，则需要考虑的是i-1得选或者不选的问题。
+    如何找到其状态描述和状态转移方程呢？
+        考虑maxSeq[i] 表示前i个的最长连续子序列的和，但是，若第i+1个本身的值就比maxSeq[i]还要大，则maxSeq[i]得变化
+            这是违背无后效性的（正常情况下找到了当前maxSeq[i]，那么后面的i+k对其是不会造成影响的）
+        考虑maxSeq[i] 表示以下标为i的元素作为最后最长子序列的结尾
+            思考这样是否可行？
+            最长连续子序列肯定是来自于所有这些元素的
+            状态的转换就在于以i或i+1结尾
+
+
+        对于一个结尾为i的最长连续子序列，那么它的前一个i-1肯定要么选要么不选
+            若选则i-1，那么对于i-2 也得进行同样的讨论。此时： maxSeq[i] = sequence[i-1] + sequence[i]
+            若不选择i-1，那么maxSeq[i] = sequence[i]
+        类似地，比较这两种情况的较大值即为i的情况。这时候，后面的i+k的情况将不会影响i的情况（这是因为我们定义的范畴就是以i结尾的情况，i+k结尾明显是另外的范畴了）
+
+        边界条件：maxSeq[0] = sequence[0]
+*/
