@@ -6,3 +6,6 @@ CONFIG -= qt
 SOURCES += \
         main.cpp \
     dp_2_methods.cpp
+
+HEADERS += \
+    dp_2_methods.h
