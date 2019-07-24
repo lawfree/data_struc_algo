@@ -191,7 +191,7 @@ Given a m x n grid containing non-negative integers,
 find a path from the top left corner to the bottom right corner so that the sum of the numbers on the path is minimal.
 Description: You can only move one step down or to the right at a time.
 
-you should input two integers in the first line to show the length and width
+you should input two integers in the first line to show the rows and column
 then you can indicate
 
 Example:
@@ -202,7 +202,7 @@ Sample Input:
     1 5 1
     4 2 1
 
-    2 3
+    3 2
     1 2
     3 5
     2 3
@@ -218,13 +218,63 @@ Explanation:
     Because the sum of the paths 1 → 3 → 2 → 3       is the smallest.
 */
 
+/*
+Thinking:
 
+As before, how can we define the status and determine the state transition equation?
+
+status and state transition equation:
+    we could define a grid named min_path_grid,which as big as the grid saved the originial data .
+    In this grid,each position saves the minize path form the top left corner the current position.
+
+    a little pause , we have known that each position can be reached only from it's directly above and left,
+    so ,we can find that the first column's datas in min_path_grid can be directly gotten.
+
+                1 3 4       1 4 8
+                1 5 1       2 ? ?
+                1 2 1       3 ? ?
+
+    and this is also the boundary condition.
+    so , we can conduct the transfer opreation form the second line and the second column.
+
+    for each position to be operated,
+        min_path_grid[i][j]  = grid[i][j] + min (min_path_grid[i][j - 1], min_path_grid[ i - 1][j]);
+    among them,
+        min_path_grid[i][j - 1]     means its left value,
+        min_path_grid[ i - 1][j]    means its the value above it.
+*/
 int grid_min_path(){
     int M = 0,N = 0;
-    cin >> M >> N >> endl;
+    std::cin >> M >> N;
 
+    int grid[M + 1][N + 1];                      //save origin datas
+    int min_path_grid[M + 1][N + 1];             //save the minize data from the top left corner to this corner
+
+    /* origin datas input */
+    for (int i = 1 ; i <= M ; i ++ )
+        for(int j = 1 ; j <= N ;j ++ )
+            cin >> grid[i][j];
+
+    /* boundary condition */
+    min_path_grid[1][1] = grid[1][1];
+
+    for(int j = 2 ; j <= N; j ++)
+        min_path_grid[1][j] = grid[1][j] + min_path_grid[1][j - 1];
+
+    for(int i = 2; i <= M; i ++)
+        min_path_grid[i][1] = grid[i][1] + min_path_grid[ i - 1][1];
+
+    /* transfer the status */
+    for(int i = 2 ; i <= M ; i ++){
+        for(int j = 2 ; j <= N ; j ++){
+            min_path_grid[i][j] = grid[i][j] + std::min (min_path_grid[i][j - 1], min_path_grid[ i - 1][j]);
+        }
+    }
+
+    cout << min_path_grid[M][N] << endl;
 
 }
+
 
 
 /*
@@ -242,16 +292,49 @@ In order to reach the princess as quickly as possible, the knight decides to mov
 Write a function to determine the knight's minimum initial health so that he is able to rescue the princess.
 For example, given the dungeon below, the initial health of the knight must be at least 7 if he follows the optimal path RIGHT-> RIGHT -> DOWN -> DOWN.
 
--2 (K)  -3      3
--5      -10     1
-10      30      -5 (P)
+    -2 (K)  -3      3
+    -5      -10     1
+    10      30      -5 (P)
 
 Note:
 The knight's health has no upper bound.
 Any room can contain threats or power-ups,
 even the first room the knight enters and the bottom-right room where the princess is imprisoned.
 
+
+you should input two integers in the first line to show the amount of rows and column
+then you can indicate
+
+Example:
+
+Sample Input:
+     3      3
+    -2      -3      3
+    -5      -10     1
+    10      30      -5
+
+    2       4
+    -3      -1      3       2
+    -2      2       -3      -5
+
+Sample Output:
+    7
+
+    5
+
+*/
+
+/*
+
 */
 int dungeon_game(){
+    int M = 0 , N = 0;
+    cin >> M >> N;
 
+    int dungeon[M + 1][N +1];
+
+//    for ()
+
+
+    return 0;
 }
