@@ -325,15 +325,63 @@ Sample Output:
 */
 
 /*
+Thinking:
+
+How can we think of this interesting question?
+how can we define the status and determine the state transition equation?
+
+we define min_heath_grid[i][j] to show that
+    from this position to the terminal point , the lest health vlaues that knight should have.
+    For example, when he reach the last point, we should have 6 health values or more.
+    And when he reach the bottom medium point, he has 1 values of health is just ok.
+
+how can we transfer the status?
+    for each position, the value determined by the value of right or below.
+    By the way ,we also determine the boundary condition.
+
+    -2  -3  3     ?   ?   2
+    -5  -10 1     ?   ?   5
+    10  30 -5     1   1   6
+
+    Mow we can determine the central position,
+    in this way the health value will be decreased 10.
+    when reaching right position he should remain 5,
+    but 1 should be required if he turn button.
+    So the lest heath is
+        1 + (- dungeon[i][j]) + min( min_heath_grid[i + 1][j] , min_health_heath_grid[i][j+1] )
+
+    -2  -3  3     ?   ?   2
+    -5  -10 1     ?   12  5
+    10  30 -5     1   1   6
+
+    But if this position add health for him, we should firstly campare with the
+So the equation of transfer should be:
+
+        min_health_grid[i][j] = 1 + (- dungeon[i][j]) + min( min_heath_grid[i + 1][j] , min_health_heath_grid[i][j+1] )
+
+
+
+
 
 */
 int dungeon_game(){
     int M = 0 , N = 0;
     cin >> M >> N;
 
-    int dungeon[M + 1][N +1];
+    int dungeon[M + 1][N +1];           //to save origin datas
+    int min_heath_grid[M + 1][N + 1];   //to save
 
-//    for ()
+    /* input the origin data */
+    for (int i = 1 ; i <= M ; i++)
+        for(int j = 1 ; i <= N ; j++)
+            cin >> dungeon[i][j];
+
+    /* boundary condition */
+    min_heath_grid[M + 1][N + 1] = ( dungeon[M + 1][N +1] > 0 ? 1 : 1 - dungeon[M + 1][N +1] );
+
+    for(int i = M +1 ; i >= 1 ; i-- )
+
+
 
 
     return 0;
