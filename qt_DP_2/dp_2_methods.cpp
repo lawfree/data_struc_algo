@@ -379,8 +379,26 @@ int dungeon_game(){
     /* boundary condition */
     min_heath_grid[M + 1][N + 1] = ( dungeon[M + 1][N +1] > 0 ? 1 : 1 - dungeon[M + 1][N +1] );
 
-    for(int i = M +1 ; i >= 1 ; i-- )
+    for(int j = N  ; j >= 1 ; j-- )
+        if (dungeon[M + 1][j] <= 0)
+            min_heath_grid[M + 1][j] = min_heath_grid[M + 1][j + 1] - dungeon[M + 1][j];
+        else
+            min_heath_grid[M + 1][j + 1] - min_heath_grid[M + 1][j] > 0 ?
+                        min_heath_grid[M + 1][j] = min_heath_grid[M + 1][j + 1] - min_heath_grid[M + 1][j] :
+                        min_heath_grid[M + 1][j] =1;
 
+    for(int i = M ; i >= 1 ; i --)
+        if(dungeon[i][N + 1] <= 0)
+            min_heath_grid[i][N +1] = min_heath_grid[i + 1][N + 1] - dungeon[i][N + 1];
+        else
+            min_heath_grid[i + 1][N + 1] - min_heath_grid[i][N + 1] > 0?
+                        min_heath_grid[i][N + 1] =  min_heath_grid[i + 1][N + 1] - min_heath_grid[i][N + 1] :
+                        min_heath_grid[i][N + 1] = 1;
+
+    /* equation of transfering of status*/
+//    for()
+//        for()
+         min_health_grid[i][j] = 1 + (- dungeon[i][j]) + min( min_heath_grid[i + 1][j] , min_health_heath_grid[i][j+1] );
 
 
 
