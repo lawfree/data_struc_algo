@@ -69,12 +69,59 @@ LeetCode 295 ,Find Midian from Data Stream
     若数据个数为偶数,中位数是该数组数排序后中间的两个数的平均值    [1,2,3,4] -> 2.5
 
 */
+
+/*
+最直观的方法
+
+存储结构使用数组,每次添加元素或查找中位数时对数组排序,再计算结果
+时间复杂度:
+    添加元素时排序,    addNum O(n)     findMedian复杂度O(1)
+    查询中位数时排序,   addNum O(n)    findMedian复杂度O(nlog)
+
+    如果添加元素或查询中位数时随机操作,共 n 次操作,整体复杂度为O(n^2)
+
+
+思路:
+    动态维护一个最大堆和一个最小堆,最大堆存储一半数据,最小堆存储一半数据,维持最大堆的堆顶比最小堆的堆顶小
+*/
 MedianFinder::MedianFinder(){
 
 }
-MedianFinder::addMedianFinder(){
+void MedianFinder::addNumber(int num){
+    if(big_queue.empty()){
+        big_queue.push(num);
+        return;
+    }
+    if(big_queue.size() == small_queue.size()){
+        if(num < big_queue.top())
+            big_queue.push(num);
+        else
+            small_queue.push(num);
+    }
+    else if(big_queue.size() > small_queue.size()){
+        if(num > big_queue.top())
+            small_queue.push(num);
+        else{
+            small_queue.push(big_queue.top());
+            big_queue.pop();
+            big_queue.push(num);
+        }
+    }
+    else if(big_queue.size() < small_queue.size()){
+        if(num < small_queue.top())
+            big_queue.push(num);
+        else{
+            big_queue.push(small_queue.top());
+            small_queue.pop();
+            small_queue.push(num);
+        }
 
+    }
 }
-MedianFinder::finMedian(){
-
+double MedianFinder::finMedian(){
+    if(big_queue.size() == small_queue.size())
+        return (big_queue.top() + small_queue.size()) / 2;
+    else if(big_queue.size() > small_queue.size())
+        return big_queue.top();
+    return small_queue();
 }
