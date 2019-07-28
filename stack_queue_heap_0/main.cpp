@@ -13,6 +13,7 @@
 #include "myqueue.h"
 //#include "mystack.h"
 #include "stack_queue_questions.h"
+#include "heap_questions.h"
 
 #define MYST 1
 #define MYQU 1
@@ -86,7 +87,10 @@ prepare knowledge of heap(优先级队列 二叉堆)
     cout << "big_heap.top = " << big_heap.top() << endl;//10
     cout << "big_heap.size = " << big_heap.size() << endl;//5
 
+    /*test  Kth Largest Element in an Array*/
+    Heap_Ques heapques;
 
+    cout << heapques.findKthLargestInHeap() << endl;
 
 
     return 0;
