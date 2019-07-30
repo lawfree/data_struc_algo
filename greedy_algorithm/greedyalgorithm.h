@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <string>
 
 using namespace std;
 
@@ -16,7 +17,9 @@ public:
 
     int wiggleSubsequence();
 
-    int removeKdigits();
+    string removeKdigits();
+
+    bool canJump();
 };
 
 

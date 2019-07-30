@@ -243,13 +243,105 @@ string Greedyalgorithm::removeKdigits(){
     int k;
     cin >> num >> k;
 
-    vector<int> S;      //使用vector当栈(因为vector可以遍历)
-    string result = ""; //存储最终结果的字符串
-    for(int i = 0; i < num.length() ; i ++){    //从最高位循环扫描数字
-        int number = num[i] - '0';  //将字符型的num\转换为int型
-//        while (S.size() !=0 && && ) {
-
-//        }
+    vector<int> S;                                  //使用vector当栈(因为vector可以遍历)
+    string result = "";                             //存储最终结果的字符串
+    for(int i = 0; i < num.length() ; i ++){        //从最高位循环扫描数字
+        int number = num[i] - '0';                  //将字符型的num转换为int型
+        while (S.size() != 0 &&   S[S.size() - 1] > number && k > 0 ) {
+            S.pop_back();                           //pop the top of stack
+            k--;
+        }
+        if(number != 0 || S.size() !=0) {
+            S.push_back(number);
+        }
     }
+    while(S.size() != 0  && k > 0){
+        S.pop_back();
+        k--;
+    }
+
+    /* save the element from vector */
+    for(int i = 0 ; i < S.size() ; i++)
+        result.append(1,'0' + S[i]);
+    if(result == ""){
+        result = "0";
+    }
+    return result;
+}
+
+/*
+LeetCode 55. JumpGame
+
+题目描述
+
+给定一个非负整数数组，你最初位于数组的第一个位置。数组中的每个元素代表你在该位置可以跳跃的最大长度。判断你是否能够到达最后一个位置。
+
+示例 1:
+
+Sample Input
+    2 3 1 1 4
+Sample Output
+    true
+
+解释: 从位置 0 到 1 跳 1 步, 然后跳 3 步到达最后一个位置。
+
+示例 2:
+
+输入: 3 2 1 0 4
+输出: false
+
+解释: 无论怎样，你总会到达索引为 3 的位置。但该位置的最大跳跃长度是 0 ， 所以你永远不可能到达最后一个位置。
+*/
+
+/*
+思考:
+
+从第i个位置,最远可跳nums[i]步:nums = [2,3,1,1,4,...];
+从第i个位置,最远可跳至第index[i]个位置:  设index[i]存放的是在原始中第i个位置能跳的最远位置
+index[i] = i + nums[i];
+index = [2,4,3,4,8,...]
+
+若从第0位置最远可以跳至第i个位置;
+则从第0位置也一定可以跳至:
+    第1个,第2个,...第i-1个位置
+那么从第0个位置,应该跳至第1个,第2个,...第i-1,第i个位置中的哪个?
+    应该跳至第1,2,...i-1,i位置中,又可向前跳至更远位置
+    [即index[1],index[2],...,index[i-1],index[i]最大的那个的位置(贪心)]
+
+
+思路:
+1.求从第i位置最远可跳至第index[i]位置:
+    根据从第i位置最远可跳nums[i]步: index = nums[i] + i ;
+2.初始化:
+    a.设置变量jump代表当前所处位置,初始化为0;
+    b.设置变量max_index代表从第0位置至jump位置这个过程中,最远可到达的位置,出书啊为index[0]
+3.利用jump扫描index数组,直到jump达到index数组尾部或jump超过max_index.扫描过程中,更新max_index.
+4.若最终jump为数组长度,则返回true,否则返回false.
+*/
+bool Greedyalgorithm::canJump(){
+    vector<int> nums;       //to save the origin data
+    vector<int> index;      //index[i] shows the ith data in nums that can reach the position in nums
+
+    /* input datas */
+    int tem = 0;
+    while (1) {
+        cin >> tem;
+        nums.push_back(tem);
+        if (tem == '\n') break;
+    }
+    for(int i = 0 ; i < nums.size() ; i ++){
+        index.push_back(i + nums[i]);
+    }
+    int jump = 0;
+    int max_index = index[0];
+    while ( jump < index.size() && jump <= max_index ) {
+        if(max_index < index[jump]){
+               max_index = index[jump];
+        }
+        jump ++ ;
+    }
+    if(max_index >= index.size())            //jump has reach the end of index array
+        return true;
+    return false;
 
 }
