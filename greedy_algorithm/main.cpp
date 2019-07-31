@@ -9,6 +9,7 @@ int main()
     Greedyalgorithm greedalgorithm;
     //cout << greedalgorithm.assignCandies() << endl;
     //cout << greedalgorithm.removeKdigits() << endl;
+    //cout << greedalgorithm.wiggleSubsequence();
     cout << greedalgorithm.canJump() << endl;
 
 

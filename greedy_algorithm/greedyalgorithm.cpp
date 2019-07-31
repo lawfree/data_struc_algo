@@ -158,7 +158,7 @@ int Greedyalgorithm::wiggleSubsequence(){
     while (1) {
         cin >> tem;
         nums.push_back(tem);
-        if (tem == '\n')    break;
+        if (cin.get() == '\n')    break;
     }
 
     if(nums.size() < 2)     //序列小于2时直接为摇摆序列
@@ -317,30 +317,36 @@ index = [2,4,3,4,8,...]
     b.设置变量max_index代表从第0位置至jump位置这个过程中,最远可到达的位置,出书啊为index[0]
 3.利用jump扫描index数组,直到jump达到index数组尾部或jump超过max_index.扫描过程中,更新max_index.
 4.若最终jump为数组长度,则返回true,否则返回false.
+
+i:          0 1 2 3 4 5 6 7
+nums[i]:    1 2 3 0 0 0 0 5
+index[i]:   1 3 5 3 4 5 6 12
+
+
 */
 bool Greedyalgorithm::canJump(){
     vector<int> nums;       //to save the origin data
     vector<int> index;      //index[i] shows the ith data in nums that can reach the position in nums
 
     /* input datas */
-    int tem = 0;
+    int tem ;
     while (1) {
         cin >> tem;
-        nums.push_back(tem);
-        if (tem == '\n') break;
+        if (cin.get() == '\n') break;
+        nums.push_back(tem);       
     }
     for(int i = 0 ; i < nums.size() ; i ++){
         index.push_back(i + nums[i]);
     }
     int jump = 0;
     int max_index = index[0];
-    while ( jump < index.size() && jump <= max_index ) {
+    while ( jump < index.size() && jump <= max_index ) {  //max_index is changing,for example, in index[i]:   1 3 5 3 4 5 .. there must be a num bigger than 5
         if(max_index < index[jump]){
                max_index = index[jump];
         }
         jump ++ ;
     }
-    if(max_index >= index.size())            //jump has reach the end of index array
+    if(jump == index.size())            //jump has reach the end of index array
         return true;
     return false;
 
