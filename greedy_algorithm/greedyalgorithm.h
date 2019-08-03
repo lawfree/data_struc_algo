@@ -24,9 +24,9 @@ public:
     int canJump2();
 
     int findMinArrowShots(vector<pair<int, int>>& points);
-    bool cmp(const pair<int , int > &a , const pair<int, int> &b);
+
 };
 
-
+   bool  cmp(const pair<int , int > &a , const pair<int, int> &b);
 
 #endif // GREEDYALGORITHM_H

@@ -12,7 +12,14 @@ int main()
     //cout << greedalgorithm.wiggleSubsequence();
     //cout << greedalgorithm.canJump() << endl;
     //cout << greedalgorithm.canJump2() << endl;
-    cout << greedalgorithm.findMinArrowShots() <<endl;
+
+    vector<pair<int , int>> points;
+    points.push_back(make_pair(10,6));
+    points.push_back(make_pair(2,8));
+    points.push_back(make_pair(1,6));
+    points.push_back(make_pair(7,12));
+
+    cout << greedalgorithm.findMinArrowShots(points) <<endl;
 
 
 
