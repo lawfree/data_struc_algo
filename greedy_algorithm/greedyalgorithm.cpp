@@ -335,6 +335,7 @@ bool Greedyalgorithm::canJump(){
         if (cin.get() == '\n') break;
         nums.push_back(tem);       
     }
+
     for(int i = 0 ; i < nums.size() ; i ++){
         index.push_back(i + nums[i]);
     }
@@ -349,5 +350,131 @@ bool Greedyalgorithm::canJump(){
     if(jump == index.size())            //jump has reach the end of index array
         return true;
     return false;
-
 }
+
+/*
+LeetCode 55. JumpGame 2
+
+ Given an array of non-negative integers, you are initially positioned at the first index of the array.
+Each element in the array represents your maximum jump length at that position.
+Your goal is to reach the last index in the minimum number of jumps.
+For example:
+
+Given array A = [2,3,1,1,4]
+The minimum number of jumps to reach the last index is 2. (Jump 1 step from index 0 to 1, then 3 steps to the last index.)
+
+Sample Input:
+    2 3 1 1 4
+Sample Output:
+    2
+*/
+
+/*
+从第0位置,最少需要跳几次达到最后一个位置?
+    如果希望最少跳跃达到终点,则需要明确何时进行跳跃是最合适的
+
+在到达某点前若一直不跳跃,发现从该点不能跳到更远的地方溜,在这之前肯定有次必要的跳跃!
+结论:在无法达到更远的地方时,在这之前应该跳到一个可以到达更远位置的位置!
+
+设置current_max_index 为当前可达到的最远位置:
+设置pre_max_max_index为在遍历各个位置的过程中,各个位置可达到的最远位置;
+设置jump_为最少跳跃的次数.
+利用i遍历nums,若i超过current_max_index,jump_min+1,current_max_index = pre_max_max_index
+遍历过程中,若nums[i]+i(index[i])更大,则更新pre_max = nums[i] + i
+
+*/
+
+int Greedyalgorithm::canJump2(){
+    vector<int> nums;       //to save the origin data
+    vector<int> index;      //index[i] shows the ith data in nums that can reach the position in nums
+
+    int tem;
+    while (1) {
+        cin >> tem;
+        if (cin .get() == '\n') break;
+        nums.push_back(tem);
+    }
+    if(nums.size() < 2){
+        return  0;
+    }
+    int current_max_index = nums[0];
+    int pre_max_max_index = nums[0];
+    int jump_min = 1;
+
+    for(int i = 1 ; i < nums.size() ; ++i){
+        if( i > current_max_index){
+            jump_min ++ ;
+            current_max_index = pre_max_max_index;
+        }
+        if(pre_max_max_index < nums[i] + 1)
+            pre_max_max_index = nums[i] + 1;
+    }
+
+    return  jump_min;
+}
+
+
+/*
+leetcode 452 Minimum Number of Arrows to Burst Balloons
+
+Question:
+There are a number of spherical balloons spread in two-dimensional space.
+For each balloon, provided input is the start and end coordinates of the horizontal diameter.
+Since it's horizontal, y-coordinates don't matter and hence the x-coordinates of start and end of the diameter suffice. Start is always smaller than end.
+There will be at most 104 balloons.An arrow can be shot up exactly vertically from different points along the x-axis.
+A balloon with xstart and xend bursts by an arrow shot at x if xstart ≤ x ≤ xend.
+There is no limit to the number of arrows that can be shot. An arrow once shot keeps travelling up infinitely.
+The problem is to find the minimum number of arrows that must be shot to burst all balloons.
+
+在二维空间中有许多球形的气球。对于每个气球，提供的输入是水平方向上，气球直径的开始和结束坐标。由于它是水平的，所以y坐标并不重要，因此只要知道开始和结束的x坐标就足够了。
+开始坐标总是小于结束坐标。平面内最多存在104个气球。
+一支弓箭可以沿着x轴从不同点完全垂直地射出。在坐标x处射出一支箭，若有一个气球的直径的开始和结束坐标为 xstart，xend， 且满足 xstart ≤ x ≤ xend，则该气球会被引爆。
+可以射出的弓箭的数量没有限制。 弓箭一旦被射出之后，可以无限地前进。我们想找到使得所有气球全部被引爆，所需的弓箭的最小数量。
+
+
+Example:
+
+Input:
+10 16
+2 8
+1 6
+7 12
+
+Output:
+2
+
+Explanation:
+One way is to shoot one arrow for example at x = 6
+ (bursting the balloons [2,8] and [1,6]) and another arrow at x = 11 (bursting the other two balloons).
+
+*/
+
+/*
+对于某个气球,至少需要使用1只弓箭将它击穿
+在这只气球将其击穿的同时,尽可能击穿其他更多的气球(贪心)
+
+1.对各个气球进行排序,按照气球的左端点从小到大排序
+2.遍历气球数组,同时维护一个射击区间,在满足可以将当前气球射穿的情况下,尽可能击穿更多的气球,每击穿一个新的气球,更新一次射击区间
+3.如果新的气球没办法击穿溜,则需要增加一个弓箭手,即维护一个新的射击区间(将该气球击穿),随后继续遍历气球数组.
+
+*/
+int Greedyalgorithm::findMinArrowShots( vector<pair<int , int>> &points){
+    if (points.size() == 0){
+        return 0;               //input data is empty ,return 0
+    }
+    sort(points.begin(),points.end(), cmp); //sort according to ball's left position
+
+    int shoot_num = 1;
+    int shoot_begin = points[0].first;
+    int shoot_end = points[0].second;       //the shoot eara
+
+    for(int i = 1; i < points.size() ; i ++){
+
+    }
+
+    return shoot_num;
+}
+bool Greedyalgorithm::cmp(const pair<int , int > &a , const pair<int, int> &b){
+    return a.first < b.first;
+}
+

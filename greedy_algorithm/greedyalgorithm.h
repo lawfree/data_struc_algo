@@ -20,6 +20,11 @@ public:
     string removeKdigits();
 
     bool canJump();
+
+    int canJump2();
+
+    int findMinArrowShots(vector<pair<int, int>>& points);
+    bool cmp(const pair<int , int > &a , const pair<int, int> &b);
 };
 
 

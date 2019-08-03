@@ -10,7 +10,9 @@ int main()
     //cout << greedalgorithm.assignCandies() << endl;
     //cout << greedalgorithm.removeKdigits() << endl;
     //cout << greedalgorithm.wiggleSubsequence();
-    cout << greedalgorithm.canJump() << endl;
+    //cout << greedalgorithm.canJump() << endl;
+    //cout << greedalgorithm.canJump2() << endl;
+    cout << greedalgorithm.findMinArrowShots() <<endl;
 
 
 
