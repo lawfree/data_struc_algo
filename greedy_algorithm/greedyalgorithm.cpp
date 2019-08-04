@@ -510,12 +510,19 @@ int Greedyalgorithm::getMinimumStop(int L , int P,                          //L�
     for(int i = 0 ; i < stop.size() ; i ++){                                //遍历各个停靠点
         int dis = L - stop[i].first;                                        //当前要走的距离即为当前终点距离L减去下一个停靠站点至终点距离
 
-        while(  ){
-
+        while( !Q.empty() &&  P < dis  ){
+            Q +=Q .top();
+            Q.pop();
+            result ++;
         }
-
-
+        if(Q.empty() && P < dis )
+            return - 1;
+        P = P - dis;
+        L = stop[i].first;
+        Q.push(stop[i].second);
     }
+    return result;
+
 
 }
 
