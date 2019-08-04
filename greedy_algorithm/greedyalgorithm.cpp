@@ -511,7 +511,7 @@ int Greedyalgorithm::getMinimumStop(int L , int P,                          //L�
         int dis = L - stop[i].first;                                        //当前要走的距离即为当前终点距离L减去下一个停靠站点至终点距离
 
         while( !Q.empty() &&  P < dis  ){
-            Q +=Q .top();
+            P += Q .top();
             Q.pop();
             result ++;
         }
