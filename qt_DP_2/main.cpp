@@ -6,7 +6,8 @@ int main()
 {
     cout << "Hello World!" << endl;
     //makeup_money();
-    triangle_min_path();
+    //triangle_min_path();
+    cout << integerBreak() << endl ;
 
 
     return 0;

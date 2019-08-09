@@ -425,6 +425,11 @@ For example, given n = 2, return 1 (2 = 1 + 1); given n = 10, return 36 (10 = 3 
 
 Note: you may assume that n is not less than 2.
 
+SampleInput:
+    10
+SampleOutput:
+    36
+
 Hint:
 
     There is a simple O(n) solution to this problem.
@@ -432,3 +437,47 @@ Hint:
 
 题意：给一个n(n>=2),求相加等于n且乘积最大的一组整数的积。
 */
+
+
+/*
+
+设maxmul[i]代表i的最大拆分结果乘积
+天然知道:
+    maxmul[2] = 1 * 1 = 1
+    maxmul[3] = 1 * 2 = 2
+
+
+对于一个数,只用考虑将其分成两个的情况,因为再继续分的情况实际上存储了的
+如当n = 10时,拆分成两个时:
+    1 * 9 = 9
+    2 * 8 = 16
+    3 * 7 = 21
+    4 * 6 = 24
+    5 * 5 = 25
+对于每一组的两个数,其又可以分,比如 (4 , 6)
+实际我们要找的是最大的拆分: 4 * (3 * 3), 其中maxmul[6] = 3*3=9
+将上面这个4一般化为j( 1 < j < n),即为:j * maxmul[n - j] ,这个式子表示拆分为两个时的最佳情况集合
+
+n 是我们的目标数,而从4开始的每一个数都应该存入数组以便以后调用.将其一般化为 i( 3 < i <= n )
+*/
+int integerBreak(){
+    int n = 0 ;
+    cin >> n;
+
+    vector<int> maxmul(n + 1 , 1);
+
+    /* boundary condition */
+    maxmul[2] = 1;
+    maxmul[3] = 2;
+
+    /* status transfer equation */
+    for(int i = 4 ; i < n + 1 ; i ++){
+        for(int j = 3; j <= i ; j ++ ){
+           // maxmul[i] = std::max(  maxmul[i] ,std::max  (j * (i - j) ,j * maxmul[i -j]  ) );
+           maxmul[i] =max( maxmul[i] , j * maxmul[i - j] );
+        }
+    }
+
+    return maxmul[n];
+
+}

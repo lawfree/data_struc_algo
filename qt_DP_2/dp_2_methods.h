@@ -15,4 +15,6 @@ int grid_min_path();
 
 int dungeon_game();
 
+int integerBreak();
+
 #endif // DP_2_METHODS_H
