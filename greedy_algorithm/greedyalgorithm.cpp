@@ -589,7 +589,7 @@ sell_po 设为 buy_po 下一个点,也是依次向前探:
 完成一次买和卖,存入maxgain中
 
 */
-int  bestBuyAndSellStock2(){
+int  Greedyalgorithm::bestBuyAndSellStock2(){
     vector<int> prices;
     prices.push_back(0);    //use 0 to take up position
 

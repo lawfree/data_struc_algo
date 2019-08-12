@@ -25,6 +25,8 @@ public:
 
     int findMinArrowShots(vector<pair<int, int>>& points);
 
+	int  bestBuyAndSellStock2();
+
 };
 
    bool  cmp(const pair<int , int > &a , const pair<int, int> &b);
