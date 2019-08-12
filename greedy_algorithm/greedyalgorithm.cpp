@@ -526,3 +526,119 @@ int Greedyalgorithm::getMinimumStop(int L , int P,                          //L�
 
 }
 
+
+
+
+
+/*
+LeetCode 122. Best Time to Buy and Sell Stock
+
+给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+
+设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
+
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+示例 1:
+
+输入: [7,1,5,3,6,4]
+输出: 7
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。
+
+示例 2:
+
+输入: [1,2,3,4,5]
+输出: 4
+解释: 在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。
+     因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+
+示例 3:
+
+输入: [7,6,4,3,1]
+输出: 0
+解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+
+
+SampleInput:  7 1 5 3 6 4
+SampleOutput: 7
+
+SampleInput:  1 2 3 4 5
+SampleOutput: 4
+
+*/
+
+/*
+thinking :
+我们希望的是在局部最小值点进行买进且在下一个局部最大值点进行卖出,即在曲线的极值点进行买进和卖出
+现在的问题即转化为
+    找到第一个极小值点买进,找到第二个极大值点卖出,再找下一个极小点买进,再找下一个极大值点卖出 ...
+
+每一次买进和卖出都是局部最优情况,所有的局部最优情况即为全局最优情况..这道题应该是贪心算法
+
+设 buy_po 为极小值点(买点), sell_po 为极大值点(卖点)
+从price[1]开始逐一向前探:
+    若下一个点比上一个点小,buy_po向前移一个单位
+    若下一个点比上一个点大,buy_po即为此时的买点
+
+sell_po 设为 buy_po 下一个点,也是依次向前探:
+    若下一个点比上一个点大,sell_po向前移动一单位
+    若下一个点比上一个点小,sell_po即为所卖点
+
+完成一次买和卖,存入maxgain中
+
+*/
+int  bestBuyAndSellStock2(){
+    vector<int> prices;
+    prices.push_back(0);    //use 0 to take up position
+
+    int tem = 0;
+    while (1) {
+        cin >> tem;
+        prices.push_back(tem);
+        if (cin.get() == '\n') break;
+    }
+
+    prices.push_back(-1);
+
+    int sell_po = prices[1], buy_po =prices[2] ;
+
+    static const int BEGIN = 0;
+    static const int UP = 1 ;
+    static const int DOWN = 2;
+    int STATE = BEGIN;
+    int maxgain = 0;
+
+    for( int i = 2 ; i < prices.size() ; i ++ ){
+        switch (STATE) {
+        case BEGIN:
+            if( prices[i - 1] < prices[i]){
+                STATE = UP;
+                buy_po = prices[i - 1];
+            }
+            else if(prices[ i - 1] > prices[i]){
+                STATE = DOWN;
+            }
+            break;
+        case UP:
+            if (prices[i - 1] > prices[ i]){
+                STATE = DOWN ;
+                sell_po = prices[i -1];
+                maxgain += sell_po - buy_po;
+            }
+            break;
+        case DOWN:
+            if (prices[i - 1] < prices [i] ){
+                STATE = UP ;
+                buy_po = prices [i -1 ];
+            }
+            break;
+        default:
+            break;
+        }
+    }
+
+    return maxgain;
+
+}
