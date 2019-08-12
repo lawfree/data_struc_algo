@@ -7,7 +7,9 @@ int main()
     cout << "Hello World!" << endl;
     //makeup_money();
     //triangle_min_path();
-    cout << integerBreak() << endl ;
+    //cout << integerBreak() << endl ;
+    //cout << bestBuyAndSellStock() << endl;
+    cout <<  bestBuyAndSellStock2() << endl;
 
 
     return 0;

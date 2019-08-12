@@ -17,4 +17,10 @@ int dungeon_game();
 
 int integerBreak();
 
+int  bestBuyAndSellStock();
+
+int  bestBuyAndSellStock2();
+
+int bestBuyAndSellStock3();
+
 #endif // DP_2_METHODS_H

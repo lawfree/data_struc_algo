@@ -412,9 +412,6 @@ int dungeon_game(){
 
 
 
-
-
-
 /*
 leetcode 343. Integer Break
 
@@ -477,7 +474,239 @@ int integerBreak(){
            maxmul[i] =max( maxmul[i] , j * maxmul[i - j] );
         }
     }
-
     return maxmul[n];
+}
 
+
+/*
+LeetCode 121. Best Time to Buy and Sell Stock
+
+Say you have an array for which the ith element is the price of a given stock on day i.
+If you were only permitted to complete at most one transaction (i.e., buy one and sell one share of the stock), design an algorithm to find the maximum profit.
+Note that you cannot sell a stock before you buy one.
+
+Input: [7,1,5,3,6,4]
+Output: 5
+Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
+             Not 7-1 = 6, as selling price needs to be larger than buying price.
+
+Input: [7,6,4,3,1]
+Output: 0
+Explanation: In this case, no transaction is done, i.e. max profit = 0.
+
+
+SampleInput: 7 1 5 3 6 4
+SamepleOutput: 5
+
+SampleInput: 7 6 4 3 1
+SampleOutput: 0
+*/
+
+
+int bestBuyAndSellStock(){
+    vector<int> prices;
+
+    int tem = 0;
+    while (1) {
+        cin >> tem;
+        prices.push_back(tem);
+        if (cin.get() == '\n') break;
+    }
+
+    int minprice = prices[0];                // save the temp minize
+    int maxgain = 0;                    // save the temp maxgain
+    if (prices.size() == 0)
+        return 0;
+    for (int i = 1; i < prices.size() ; i ++){
+        maxgain = max( maxgain, prices[i] - minprice );
+        minprice = min ( minprice , prices[i]);
+    }
+
+
+    return maxgain;
+}
+
+/*
+LeetCode 122. Best Time to Buy and Sell Stock
+
+给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+
+设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
+
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+示例 1:
+
+输入: [7,1,5,3,6,4]
+输出: 7
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。
+
+示例 2:
+
+输入: [1,2,3,4,5]
+输出: 4
+解释: 在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。
+     因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+
+示例 3:
+
+输入: [7,6,4,3,1]
+输出: 0
+解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+
+
+SampleInput:  7 1 5 3 6 4
+SampleOutput: 7
+
+SampleInput:  1 2 3 4 5
+SampleOutput: 4
+
+*/
+
+/*
+thinking :
+我们希望的是在局部最小值点进行买进且在下一个局部最大值点进行卖出,即在曲线的极值点进行买进和卖出
+现在的问题即转化为
+    找到第一个极小值点买进,找到第二个极大值点卖出,再找下一个极小点买进,再找下一个极大值点卖出 ...
+
+每一次买进和卖出都是局部最优情况,所有的局部最优情况即为全局最优情况..这道题应该是贪心算法
+
+设 buy_po 为极小值点(买点), sell_po 为极大值点(卖点)
+从price[1]开始逐一向前探:
+    若下一个点比上一个点小,buy_po向前移一个单位
+    若下一个点比上一个点大,buy_po即为此时的买点
+
+sell_po 设为 buy_po 下一个点,也是依次向前探:
+    若下一个点比上一个点大,sell_po向前移动一单位
+    若下一个点比上一个点小,sell_po即为所卖点
+
+完成一次买和卖,存入maxgain中
+
+*/
+int  bestBuyAndSellStock2(){
+    vector<int> prices;
+    prices.push_back(0);    //use 0 to take up position
+
+    int tem = 0;
+    while (1) {
+        cin >> tem;
+        prices.push_back(tem);
+        if (cin.get() == '\n') break;
+    }
+
+    prices.push_back(-1);
+
+    int sell_po = prices[1], buy_po =prices[2] ;
+
+    static const int BEGIN = 0;
+    static const int UP = 1 ;
+    static const int DOWN = 2;
+    int STATE = BEGIN;
+    int maxgain = 0;
+
+    for( int i = 2 ; i < prices.size() ; i ++ ){
+        switch (STATE) {
+        case BEGIN:
+            if( prices[i - 1] < prices[i]){
+                STATE = UP;
+                buy_po = prices[i - 1];
+            }
+            else if(prices[ i - 1] > prices[i]){
+                STATE = DOWN;
+            }
+            break;
+        case UP:
+            if (prices[i - 1] > prices[ i]){
+                STATE = DOWN ;
+                sell_po = prices[i -1];
+                maxgain += sell_po - buy_po;
+            }
+            break;
+        case DOWN:
+            if (prices[i - 1] < prices [i] ){
+                STATE = UP ;
+                buy_po = prices [i -1 ];
+            }
+            break;
+        default:
+            break;
+        }
+    }
+
+    return maxgain;
+
+}
+
+
+/*
+LeetCode 123. Best Time to Buy and Sell Stock3
+Say you have an array for which the ith element is the price of a given stock on day i.
+Design an algorithm to find the maximum profit. You may complete at most **two** transactions.
+Note: You may not engage in multiple transactions at the same time (i.e., you must sell the stock before you buy again).
+
+Example 1:
+
+    Input: [3,3,5,0,0,3,1,4]
+    Output: 6
+    Explanation: Buy on day 4 (price = 0) and sell on day 6 (price = 3), profit = 3-0 = 3.
+                 Then buy on day 7 (price = 1) and sell on day 8 (price = 4), profit = 4-1 = 3.
+
+Example 2:
+
+    Input: [1,2,3,4,5]
+    Output: 4
+    Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-1 = 4.
+                 Note that you cannot buy on day 1, buy on day 2 and sell them later, as you are
+                 engaging multiple transactions at the same time. You must sell before buying again.
+
+Example 3:
+
+    Input: [7,6,4,3,1]
+    Output: 0
+    Explanation: In this case, no transaction is done, i.e. max profit = 0.
+
+*/
+
+
+/*
+错误思路（❌）: 本来想的是按之前II的low high标记每一段局部递增，然后计算局部利润，存最大的两个局部利润最后求和。但是这样用例只能通过189/200。
+
+举个不通过的例子 [1,2,4,2,5,7,2,4,9,0]￼
+按之前的局部分段利润来说是【1，2，4】=3、【2，5，7】=5、【2，4，9】=7 取5+7=12
+但是正确解法是【1，2，4，2，5，7】=6、【2，4，9】=7，6+7=13
+这样II的解法就行不通了。
+
+思路2（✅)
+从前往后扫描，f[i] 记录前 i 天中买卖一次的最大收益（不一定在第 i 天卖）。
+从后往前扫描，计算从i th天买入能获取的最大收益，即第i天后的最大价格 - prices[i]。
+两次交易的最大收益sum = 第i天买入能获取的最大收益 + f[ i -1 ]
+时间复杂度O(n)
+*/
+int bestBuyAndSellStock3(){
+    vector<int> prices;
+
+    /* input */
+    int tem = 0;
+    while (1) {
+        cin >> tem;
+        if (cin.get() == '\n') break;
+    }
+
+    int maxgain_1 = 0 , maxgain_2 = 0;
+    int minprice_1 = prices[0] , minprice_2 = prices[prices.size() - 1];
+    int i = 0 ,j = prices.size() -1 ;
+    while ( i != j ){
+        maxgain_1 = max ( maxgain_1 ,prices[i] - minprice_1);
+        minprice_1 = min( minprice_1 , prices[i] );
+        i ++;
+
+        maxgain_2 = max( maxgain_2 , prices[j] - minprice_2);
+        minprice_2 = min(minprice_2 , prices[j]);
+        j -- ;
+
+    }
+
+    return maxgain_1 + maxgain_2 ;
 }
