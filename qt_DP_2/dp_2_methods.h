@@ -28,4 +28,8 @@ int sumRange( int low , int heigh);
 
 string findLongestPalSubstring();
 
+int numOfPalSubstring();
+
+int numOfAritSlices();
+
 #endif // DP_2_METHODS_H

@@ -10,7 +10,9 @@ int main()
     //cout << integerBreak() << endl ;
     //cout << bestBuyAndSellStock() << endl;
     //cout <<  bestBuyAndSellStock2() << endl;
-    cout << findLongestPalSubstring() << endl;
+    //cout << findLongestPalSubstring() << endl;
+    //cout << numOfPalSubstring() << endl;
+    cout << numOfAritSlices() << endl;
 
 
     return 0;

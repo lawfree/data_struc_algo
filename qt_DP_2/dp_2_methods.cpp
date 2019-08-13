@@ -812,6 +812,8 @@ string findLongestPalSubstring(){
     int longest = 1;        //save
     int start = 0;
     vector< vector< int >>  dp(len , vector<int>(len));
+
+    /* think of all single element and two subquence and same */
     for(int i = 0 ; i < len ; i++){
         dp[i][i] = 1;
         if(i < len - 1  && str[i] == str[i + 1]){
@@ -820,6 +822,8 @@ string findLongestPalSubstring(){
             longest = 2;
         }
     }
+
+    /* think of other condition */
     for(int l = 3 ; l <= len ; l ++){               //length of substring
         for(int i = 0 ; i + l - 1 < len ; i ++){    //enum the start of the substring
             int j = l + i - 1;  //end point
@@ -831,5 +835,140 @@ string findLongestPalSubstring(){
         }
     }
     return str.substr(start , longest);
+}
+
+/*
+【LeetCode】647. number of Palindromic Substring
+
+题目描述
+给定一个字符串，你的任务是计算这个字符串中有多少个回文子串。
+具有不同开始位置或结束位置的子串，即使是由相同的字符组成，也会被计为是不同的子串。
+示例
+
+输入: “abc”
+输出: 3
+解释: 三个回文子串: “a”, “b”, “c”.
+
+输入: “aaa”
+输出: 6
+说明: 6个回文子串: “a”, “a”, “a”, “aa”, “aa”, “aaa”.
+
+SampleInput:
+    aaa
+SampleOutput:
+    6
+注意:
+输入的字符串长度不会超过1000。
+
+*/
+
+int numOfPalSubstring(){
+    string str;
+    cin >> str ;
+
+    int len = str.size();
+    if(str.empty()) return 0;
+    if(len == 1) return 1;
+
+    int start = 0;
+    vector<vector <int>> dp(len , vector<int>(len));
+    int num_substr = 0;
+
+
+    for(int i = 0 ; i < len ; i ++){
+        dp[i][i] = 1;
+        num_substr ++ ;
+        if(i < len - 1 && str[i] == str[i + 1]){
+            dp[i][i + 1] = 1 ;
+            num_substr ++ ;
+        }
+    }
+    for(int l = 3 ; l <= len ; l ++){
+        for(int i = 0 ; i + l - 1 < len ; i ++){
+            int j = l + i - 1 ;         //end point
+            if(str[i] == str[j] && dp[i + 1][j - 1] == 1){
+                dp[i][j] = 1 ;
+                num_substr ++;
+            }
+        }
+    }
+    return num_substr;
 
 }
+
+/*
+LeetCode 413. Arithmetic Slices
+
+A sequence of number is called arithmetic if it consists of at least three elements and if the difference between any two consecutive elements is the same.
+For example, these are arithmetic sequence:
+
+1   3   5   7
+7   7   7   7
+3  -1  -5  -9
+
+A zero-indexed array A consisting of N numbers is given. A slice of that array is any pair of integers (P, Q) such that 0 <= P < Q < N.
+
+A slice (P, Q) of array A is called arithmetic if the sequence:
+A[P], A[p + 1], …, A[Q - 1], A[Q] is arithmetic. In particular, this means that P + 1 < Q.
+
+The function should return the number of arithmetic slices in the array A.
+
+SampleInput:
+     1 2 3 4
+SampleOutput:
+    3
+        for 3 arithmetic slices in 1 2 3 4:
+        1 2 3, 2 3 4, 1 2 3 4
+*/
+int numOfAritSlices(){
+    vector<int> nums;
+    int count = 0;
+
+    int tem;
+    while (1) {
+        cin >> tem;
+        nums.push_back(tem);
+        if(cin .get() == '\n') break;
+    }
+
+    vector<int> dp( nums.size() , 0 );
+
+    dp[0] = dp[1] = 0;
+    for(int i = 2 ; i < nums.size() ; i ++ ){
+        if( nums[i] - nums[i -1] == nums[i - 1] - nums[i -2])
+            dp[i] = dp[i - 1] + 1;
+        count += dp[i];
+    }
+
+    return count;
+}
+
+
+/*
+
+给定两个字符串s1, s2，找到使两个字符串相等所需删除字符的ASCII值的最小和。
+
+示例 1:
+
+输入: s1 = "sea", s2 = "eat"
+输出: 231
+解释: 在 "sea" 中删除 "s" 并将 "s" 的值(115)加入总和。
+在 "eat" 中删除 "t" 并将 116 加入总和。
+结束时，两个字符串相等，115 + 116 = 231 就是符合条件的最小和。
+
+示例 2:
+
+输入: s1 = "delete", s2 = "leet"
+输出: 403
+解释: 在 "delete" 中删除 "dee" 字符串变成 "let"，
+将 100[d]+101[e]+101[e] 加入总和。在 "leet" 中删除 "e" 将 101[e] 加入总和。
+结束时，两个字符串都等于 "let"，结果即为 100+101+101+101 = 403 。
+如果改为将两个字符串转换为 "lee" 或 "eet"，我们会得到 433 或 417 的结果，比答案更大。
+
+注意:
+
+    0 < s1.length, s2.length <= 1000。
+    所有字符串中的字符ASCII值在[97, 122]之间。
+
+
+*/
