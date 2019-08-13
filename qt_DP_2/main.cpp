@@ -9,7 +9,8 @@ int main()
     //triangle_min_path();
     //cout << integerBreak() << endl ;
     //cout << bestBuyAndSellStock() << endl;
-    cout <<  bestBuyAndSellStock2() << endl;
+    //cout <<  bestBuyAndSellStock2() << endl;
+    cout << findLongestPalSubstring() << endl;
 
 
     return 0;

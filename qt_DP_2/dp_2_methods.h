@@ -23,4 +23,9 @@ int  bestBuyAndSellStock2();
 
 int bestBuyAndSellStock3();
 
+int rangeSum();
+int sumRange( int low , int heigh);
+
+string findLongestPalSubstring();
+
 #endif // DP_2_METHODS_H

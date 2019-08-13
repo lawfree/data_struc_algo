@@ -710,3 +710,126 @@ int bestBuyAndSellStock3(){
 
     return maxgain_1 + maxgain_2 ;
 }
+
+
+/*
+Leetcode 303  Range Sum Query
+
+Given an integer arraynums, find the sum of the elements between indicesiandj(i≤j), inclusive.
+
+Example:
+Given nums = [-2, 0, 3, -5, 2, -1]
+sumRange(0, 2) -> 1
+sumRange(2, 5) -> -1
+sumRange(0, 5) -> -3
+
+SampleInput:
+    -2 0 3 -5 2 -1
+    0 2
+SampleOutput:
+    -1
+说明:
+1、你可以假设数组不可变。
+2、会多次调用 sumRange 方法。
+*/
+
+/*
+思路：如果直接遍历求和的话，无法通过，所以用dp来记录[0,j]的和，如果求[i,j]的区间和，就用dp[j]-dp[i].
+*/
+class rangeSum{
+public:
+    vector<int> nums;
+
+    rangeSum(){
+        /* intput  */
+        int low = 0, heigh = 0;
+        cin >> low >> heigh;
+
+        int tem = 0;
+        while (1) {
+            cin >> tem;
+            if (cin .get() == '\n')
+                break;
+        }
+
+        dp.resize(nums.size() + 1 , 0);
+        for(int i = 1 ; i < nums.size() + 1 ; i++){
+            dp[i] = dp[i - 1] + nums[i - 1];
+        }
+
+    }
+
+    int sumRange(int low, int heigh){
+        return dp[heigh + 1] - dp[low];
+    }
+private:
+    vector<int> dp;         //dp[i] is to save the sum of nums[0] to nums[i]
+};
+
+/*
+LeetCode 5: Longest Palindromic Substring
+
+题目描述
+
+给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为1000。
+示例
+
+输入: “babad”
+输出: “bab”
+注意: "aba"也是一个有效答案。
+
+输入: “cbbd”
+输出: “bb”
+
+Sameple Input:
+    badad
+Sameple Output:
+    bab
+*/
+
+/*
+ 对于字符串str，假设dp[i,j]=1表示str[i...j]是回文子串，那个必定存在dp[i+1,j-1]=1。
+这样最长回文子串就能分解成一系列子问题，可以利用动态规划求解了。首先构造状态转移方程
+                dp[i + 1][j - 1],       str[i] = str[j]
+    dp[i][j] =
+                0                       str[i] != str[j]
+上面的状态转移方程表示，当str[i]=str[j]时，如果str[i+1...j-1]是回文串，则str[i...j]也是回文串；如果str[i+1...j-1]不是回文串，则str[i...j]不是回文串。
+
+初始状态
+    dp[i][i]=1
+    dp[i][i+1]=1 if str[i]==str[i+1]
+        上式的意义是单个字符，两个相同字符都是回文串。
+
+*/
+string findLongestPalSubstring(){
+    string str ;
+    cin >> str ;
+
+    int len = str.size();
+    if(str.empty()) return "";
+    if(len == 1) return str;
+
+    int longest = 1;        //save
+    int start = 0;
+    vector< vector< int >>  dp(len , vector<int>(len));
+    for(int i = 0 ; i < len ; i++){
+        dp[i][i] = 1;
+        if(i < len - 1  && str[i] == str[i + 1]){
+            dp[i][i + 1] = 1;
+            start = i;
+            longest = 2;
+        }
+    }
+    for(int l = 3 ; l <= len ; l ++){               //length of substring
+        for(int i = 0 ; i + l - 1 < len ; i ++){    //enum the start of the substring
+            int j = l + i - 1;  //end point
+            if(str[i] == str[j] && dp[i + 1][j - 1] == 1){
+                dp[i][j] = 1;
+                start = i;
+                longest = l;
+            }
+        }
+    }
+    return str.substr(start , longest);
+
+}
