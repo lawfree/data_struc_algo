@@ -945,6 +945,7 @@ int numOfAritSlices(){
 
 
 /*
+LeetCode 713.  Minimum ASCII Delete Sum for Two Strings
 
 给定两个字符串s1, s2，找到使两个字符串相等所需删除字符的ASCII值的最小和。
 
@@ -965,10 +966,57 @@ int numOfAritSlices(){
 结束时，两个字符串都等于 "let"，结果即为 100+101+101+101 = 403 。
 如果改为将两个字符串转换为 "lee" 或 "eet"，我们会得到 433 或 417 的结果，比答案更大。
 
+SampleInput:
+    delete leet
+SamepleOutput:
+    403
 注意:
 
     0 < s1.length, s2.length <= 1000。
     所有字符串中的字符ASCII值在[97, 122]之间。
+*/
 
+int deleteSumForTwoStrings(){
+    string s1 , s2;
+    cin >> s1 >> s2;
+
+    int m = s1.size(), n = s2.size();
+    vector < vector <int>> dp( m + 1 ,  vector<int> (n +1 , 0 ) );
+
+    /* boundary condition */
+    for(int i = 1 ; i <= m ; i ++)
+        dp[i][0] = dp[i -1][0] + s1[i -1];
+    for(int j = 1 ; j <= n ; j ++)
+        dp[0][j] = dp[0][j - 1] + s2[j -1];
+
+    /* transfer  equation */
+    for(int i = 1 ; i <= m ; i ++){
+        for (int j = 1 ; j <= n ; j ++){
+            dp[i][j] =  (s1[i - 1] == s2[j -1] ?
+                        dp[i - 1][j - 1] : min( dp[i -1][j] + s1[i - 1] , dp[i][j - 1] + s2[j - 1]) );
+        }
+    }
+    return dp[m][n];
+
+}
+
+/*
+leetcode 713. Subarray Product Less Than K
+
+
+Your are given an array of positive integers nums.
+
+Count and print the number of (contiguous) subarrays where the product of all the elements in the subarray is less than k.
+
+Example 1:
+Input: nums = [10, 5, 2, 6], k = 100
+Output: 8
+Explanation: The 8 subarrays that have product less than 100 are: [10], [5], [2], [6], [10, 5], [5, 2], [2, 6], [5, 2, 6].
+Note that [10, 5, 2] is not included as the product of 100 is not strictly less than k.
+Note:
+
+0 < nums.length <= 50000.
+0 < nums[i] < 1000.
+0 <= k < 10^6.
 
 */

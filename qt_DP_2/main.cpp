@@ -12,8 +12,8 @@ int main()
     //cout <<  bestBuyAndSellStock2() << endl;
     //cout << findLongestPalSubstring() << endl;
     //cout << numOfPalSubstring() << endl;
-    cout << numOfAritSlices() << endl;
-
+    //cout << numOfAritSlices() << endl;
+    cout << deleteSumForTwoStrings() << endl;
 
     return 0;
 }

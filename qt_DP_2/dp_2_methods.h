@@ -32,4 +32,6 @@ int numOfPalSubstring();
 
 int numOfAritSlices();
 
+int deleteSumForTwoStrings();
+
 #endif // DP_2_METHODS_H
