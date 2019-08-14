@@ -484,5 +484,161 @@ bool cmp(const pair<int , int > &a , const pair<int, int> &b){
 }
 
 /*
+已知一条公路上,有一个起点和终点,这之间有n个加油站,已知从这n个加油站到终点的距离d与各个加油站可以加油的量l,起点位置至终点距离L与起始时刻邮箱中汽油量P;
+假设使用1个单位的汽油即走一个单位的距离,邮箱没有上限,最少加几次油,可以从起点开至终点?(若不能到达终点,返回-1)
+
+何时加油最合适?
+    油用光的时候加油最合适
+在哪个加油站加油最合适?
+    在加油量最大多的加油站最合适
+
+算法
+    1.设置一个最大堆,用来存储经过的加油站的汽油量
+    2.按照从起点至终点的方向,遍历各个加油站之间的距离
+    3.每次需要走两个加油站之间的距离d,如果发现汽油不够走距离d时,从最大堆中取出一个油量添加,直到可以足够走距离d.
+    4.如果把最大堆的汽油都添加仍然不够行进距离d,则无法到达终点
+    5.当前油量P被减少d
+    6.将当前加油站油量添加至最大堆.
+*/
+int Greedyalgorithm::getMinimumStop(int L , int P,                          //L为起点到终点的距离,P为起点初始的汽油量
+                                    std::vector<pair<int , int>> &stop){    //pair<加油站至终点的距离 , 加油站汽油量>
+    std::priority_queue<int> Q;                                             //存储油量的最大堆
+    int result = 0;                                                         //记录加过几次油变量
+
+    stop.push_back(std::make_pair(0,0));                                    //将终点作为一个停靠点,添加至stop数组
+    std::sort(stop.begin(),stop.end() , cmp );                              //以停靠点至终点的距离 从大到小 进行排序
+    for(int i = 0 ; i < stop.size() ; i ++){                                //遍历各个停靠点
+        int dis = L - stop[i].first;                                        //当前要走的距离即为当前终点距离L减去下一个停靠站点至终点距离
+
+        while( !Q.empty() &&  P < dis  ){
+            P += Q .top();
+            Q.pop();
+            result ++;
+        }
+        if(Q.empty() && P < dis )
+            return - 1;
+        P = P - dis;
+        L = stop[i].first;
+        Q.push(stop[i].second);
+    }
+    return result;
+
+
+}
+
+
+
+
+
+/*
+LeetCode 122. Best Time to Buy and Sell Stock
+
+给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+
+设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
+
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+示例 1:
+
+输入: [7,1,5,3,6,4]
+输出: 7
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。
+
+示例 2:
+
+输入: [1,2,3,4,5]
+输出: 4
+解释: 在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。
+     因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+
+示例 3:
+
+输入: [7,6,4,3,1]
+输出: 0
+解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+
+
+SampleInput:  7 1 5 3 6 4
+SampleOutput: 7
+
+SampleInput:  1 2 3 4 5
+SampleOutput: 4
 
 */
+
+/*
+thinking :
+我们希望的是在局部最小值点进行买进且在下一个局部最大值点进行卖出,即在曲线的极值点进行买进和卖出
+现在的问题即转化为
+    找到第一个极小值点买进,找到第二个极大值点卖出,再找下一个极小点买进,再找下一个极大值点卖出 ...
+
+每一次买进和卖出都是局部最优情况,所有的局部最优情况即为全局最优情况..这道题应该是贪心算法
+
+设 buy_po 为极小值点(买点), sell_po 为极大值点(卖点)
+从price[1]开始逐一向前探:
+    若下一个点比上一个点小,buy_po向前移一个单位
+    若下一个点比上一个点大,buy_po即为此时的买点
+
+sell_po 设为 buy_po 下一个点,也是依次向前探:
+    若下一个点比上一个点大,sell_po向前移动一单位
+    若下一个点比上一个点小,sell_po即为所卖点
+
+完成一次买和卖,存入maxgain中
+
+*/
+int  Greedyalgorithm::bestBuyAndSellStock2(){
+    vector<int> prices;
+    prices.push_back(0);    //use 0 to take up position
+
+    int tem = 0;
+    while (1) {
+        cin >> tem;
+        prices.push_back(tem);
+        if (cin.get() == '\n') break;
+    }
+
+    prices.push_back(-1);
+
+    int sell_po = prices[1], buy_po =prices[2] ;
+
+    static const int BEGIN = 0;
+    static const int UP = 1 ;
+    static const int DOWN = 2;
+    int STATE = BEGIN;
+    int maxgain = 0;
+
+    for( int i = 2 ; i < prices.size() ; i ++ ){
+        switch (STATE) {
+        case BEGIN:
+            if( prices[i - 1] < prices[i]){
+                STATE = UP;
+                buy_po = prices[i - 1];
+            }
+            else if(prices[ i - 1] > prices[i]){
+                STATE = DOWN;
+            }
+            break;
+        case UP:
+            if (prices[i - 1] > prices[ i]){
+                STATE = DOWN ;
+                sell_po = prices[i -1];
+                maxgain += sell_po - buy_po;
+            }
+            break;
+        case DOWN:
+            if (prices[i - 1] < prices [i] ){
+                STATE = UP ;
+                buy_po = prices [i -1 ];
+            }
+            break;
+        default:
+            break;
+        }
+    }
+
+    return maxgain;
+
+}

@@ -15,4 +15,23 @@ int grid_min_path();
 
 int dungeon_game();
 
+int integerBreak();
+
+int  bestBuyAndSellStock();
+
+int  bestBuyAndSellStock2();
+
+int bestBuyAndSellStock3();
+
+int rangeSum();
+int sumRange( int low , int heigh);
+
+string findLongestPalSubstring();
+
+int numOfPalSubstring();
+
+int numOfAritSlices();
+
+int deleteSumForTwoStrings();
+
 #endif // DP_2_METHODS_H
