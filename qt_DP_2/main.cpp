@@ -15,7 +15,8 @@ int main()
     //cout << numOfAritSlices() << endl;
     //cout << deleteSumForTwoStrings() << endl;
     //cout << subarrProductLessThanK() << endl;
-    cout << keysKeyboard() << endl;
+    //cout << keysKeyboard() << endl;
+    cout << isSubsequence() << endl;
 
 
     return 0;

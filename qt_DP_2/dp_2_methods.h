@@ -38,4 +38,8 @@ int subarrProductLessThanK();
 
 int keysKeyboard();
 
+bool predictWinner();
+
+bool isSubsequence();
+
 #endif // DP_2_METHODS_H

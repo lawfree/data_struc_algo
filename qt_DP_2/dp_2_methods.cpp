@@ -1156,5 +1156,68 @@ bool predictWinner(){
         if (cin.get() == '\n')  break;
     }
 
+    int n = nums.size();
+    vector <vector<int>> dp(n, vector<int>(n , 0));
 
+    /* boundary */
+    for( int i = 0 ; i < n ; i ++)
+        dp[i][i] = nums[i];
+
+    /* transfer status */
+    for(int len = 1 ; len < n ; len ++){
+        for(int i = 0 , j = len ; j < n; i ++ , j++){
+            dp[i][j] = max(nums[i] - dp[i + 1][j], nums[j] - dp[i][j -1]);
+        }
+    }
+    return dp[0][n - 1] >= 0;
+
+}
+
+
+
+/*
+[LeetCode] Is Subsequence 是子序列
+
+
+Given a string s and a string t, check if s is subsequence of t.
+You may assume that there is only lower case English letters in both s and t.
+t is potentially a very long (length ~= 500,000) string, and s is a short string (<=100).
+
+A subsequence of a string is a new string which is formed from the original string by deleting some (can be none) of
+the characters without disturbing the relative positions of the remaining characters. (ie, "ace" is a subsequence of "abcde" while "aec" is not).
+
+Example 1:
+s = "abc", t = "ahbgdc"
+Return true.
+
+Example 2:
+s = "axc", t = "ahbgdc"
+Return false.
+
+Follow up:
+If there are lots of incoming S, say S1, S2, ... , Sk where k >= 1B, and you want to check one by one to see if T has its subsequence.
+In this scenario, how would you change your code?
+
+Credits:
+Special thanks to @pbrother for adding this problem and creating all test cases.
+
+*/
+
+bool isSubsequence(){
+    string s, t;
+    cin >> s >> t;
+
+    int m = s.size();
+    int n = t.size();
+
+    int i =0,j = 0;
+    while (i < m && j < n) {
+        if(s[i] == t[j]){
+            i++ ; j ++;
+        }
+        else
+            j ++;
+    }
+    if (i == m) return true;
+    return false;
 }
