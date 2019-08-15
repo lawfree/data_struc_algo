@@ -34,4 +34,8 @@ int numOfAritSlices();
 
 int deleteSumForTwoStrings();
 
+int subarrProductLessThanK();
+
+int keysKeyboard();
+
 #endif // DP_2_METHODS_H

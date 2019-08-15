@@ -1019,4 +1019,142 @@ Note:
 0 < nums[i] < 1000.
 0 <= k < 10^6.
 
+SampleInput:
+    10 5 2 6
+    100
+SampleOutput:
+    8
 */
+int subarrProductLessThanK(){
+    vector<int> nums;
+    int k = 0;          //target number
+    int res = 0;        //count the result
+
+    /* input  */
+    int tem = 0;
+    while (1) {
+        cin >> tem ;
+        nums.push_back(tem);
+        if(cin.get() == '\n') break;
+    }
+     cin >> k ;
+
+    int len = nums.size();
+    vector < vector< int > > dp( len + 1 , vector<int>(len +1 , 0) );
+
+    /* boundary condition */
+    for (int i = 1 ; i <= len; i ++ ){
+        dp[i][i] = nums[i - 1];
+        if (dp[i][i] < k) res ++ ;
+    }
+
+    /* transfer equation */
+    for (int i = 1 ;  i < len ; i ++){
+        for (int j = i + 1 ; j <= len ; j ++){
+            dp[i][j] = dp [i][j - 1] * nums[j -1 ];
+            if (dp[i][j] < k) res ++;
+            else break;
+        }
+    }
+
+    return res;
+}
+//     repo init --repo-url ssh://git@www.rockchip.com.cn/repo/rk/tools/repo -u ssh://git@www.rockchip.com.cn/linux/rk/platform/manifests -b linux -m rk3399_linux_release.xml
+
+
+/*
+LeetCode 650.  Keys Keyboard
+
+
+Initially on a notepad only one character 'A' is present. You can perform two operations on this notepad for each step:
+
+Copy All: You can copy all the characters present on the notepad (partial copy is not allowed).
+Paste: You can paste the characters which are copied last time.
+Given a number n. You have to get exactly n 'A' on the notepad by performing the minimum number of steps permitted.
+Output the minimum number of steps to get n 'A'.
+
+Example 1:
+Input: 3
+Output: 3
+Explanation:
+Intitally, we have one character 'A'.
+In step 1, we use Copy All operation.
+In step 2, we use Paste operation to get 'AA'.
+In step 3, we use Paste operation to get 'AAA'.
+Note:
+The n will be in the range [1, 1000].
+
+*/
+int keysKeyboard(){
+    int num = 0 ;                   //num saves the number of
+    cin >> num;
+
+    vector<int> dp(num + 1 , 0);    //dp[i] means for i character 'A', we need dp[i] to get it.
+
+    /* boundary condition */
+    dp[1] = 0;
+    dp[2] = 2;
+    dp[3] = 3;
+
+    for(int i = 4 ; i <= num ; i ++ ){
+        dp[i] = i ;
+        for ( int j = 2 ; j <= i/2 ; j ++ ){
+            if( i % j == 0)
+                dp[i] = min ( dp[i] , dp[j] + i / j );
+        }
+    }
+    return dp[num];
+}
+
+/*
+486. Predict the Winner
+
+Given an array of scores that are non-negative integers.
+ Player 1 picks one of the numbers from either end of the array followed by the player 2 and then player 1 and so on.
+ Each time a player picks a number, that number will not be available for the next player.
+This continues until all the scores have been chosen. The player with the maximum score wins.
+
+Given an array of scores, predict whether player 1 is the winner.
+You can assume each player plays to maximize his score.
+
+Example 1:
+
+Input: [1, 5, 2]
+Output: False
+Explanation: Initially, player 1 can choose between 1 and 2.
+If he chooses 2 (or 1), then player 2 can choose from 1 (or 2) and 5. If player 2 chooses 5, then player 1 will be left with 1 (or 2).
+So, final score of player 1 is 1 + 2 = 3, and player 2 is 5.
+Hence, player 1 will never be the winner and you need to return False.
+
+Example 2:
+
+Input: [1, 5, 233, 7]
+Output: True
+Explanation: Player 1 first chooses 1. Then player 2 have to choose between 5 and 7. No matter which number player 2 choose, player 1 can choose 233.
+Finally, player 1 has more score (234) than player 2 (12), so you need to return True representing player1 can win.
+
+Note:
+
+    1 <= length of the array <= 20.
+    Any scores in the given array are non-negative integers and will not exceed 10,000,000.
+    If the scores of both players are equal, then player 1 is still the winner.
+
+SampleInput:
+    1 5 233 7
+SampleOutput:
+    true
+
+*/
+
+bool predictWinner(){
+    vector<int> nums;
+
+    int tem = 0;
+    while (1) {
+        cin >> tem;
+        nums.push_back(tem);
+        if (cin.get() == '\n')  break;
+    }
+
+
+}
