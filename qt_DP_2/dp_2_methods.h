@@ -42,4 +42,6 @@ bool predictWinner();
 
 bool isSubsequence();
 
+int combinationSumIV();
+
 #endif // DP_2_METHODS_H

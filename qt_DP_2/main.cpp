@@ -16,7 +16,7 @@ int main()
     //cout << deleteSumForTwoStrings() << endl;
     //cout << subarrProductLessThanK() << endl;
     //cout << keysKeyboard() << endl;
-    cout << isSubsequence() << endl;
+    //cout << isSubsequence() << endl;
 
 
     return 0;

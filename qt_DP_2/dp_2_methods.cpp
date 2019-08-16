@@ -1221,3 +1221,117 @@ bool isSubsequence(){
     if (i == m) return true;
     return false;
 }
+
+
+/*
+LeetCode 39. Combination Sum I
+
+Given a set of candidate numbers (C) (without duplicates) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
+The same repeated number may be chosen from C unlimited number of times.
+
+Note:
+All numbers (including target) will be positive integers.
+The solution set must not contain duplicate combinations.
+For example, given candidate set [2, 3, 6, 7] and target 7,
+A solution set is:
+[
+  [7],
+  [2, 2, 3]
+]
+*/
+
+/*
+LeetCode 40. Combination Sum II
+
+Given a collection of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
+Each number in C may only be used once in the combination.
+
+Note:
+All numbers (including target) will be positive integers.
+The solution set must not contain duplicate combinations.
+For example, given candidate set [10, 1, 2, 7, 6, 1, 5] and target 8,
+A solution set is:
+[
+  [1, 7],
+  [1, 2, 5],
+  [2, 6],
+  [1, 1, 6]
+]
+*/
+
+/*
+
+LeetCode 216. Combination Sum III
+
+Find all possible combinations of k numbers that add up to a number n, given that only numbers from 1 to 9 can be used and each combination should be a unique set of numbers.
+
+Example 1:
+Input:
+    k = 3,  n = 7
+Output:
+    [[1,2,4]]
+
+
+Example 2:
+Input:
+    k = 3,  n = 9
+Output:
+    [[1,2,6], [1,3,5], [2,3,4]]
+*/
+
+/*
+377. Combination Sum IV
+
+Given an integer array with all positive numbers and no duplicates, find the number of possible combinations that add up to a positive integer target.
+
+Example:
+
+nums = [1, 2, 3]
+target = 4
+
+The possible combination ways are:
+(1, 1, 1, 1)
+(1, 1, 2)
+(1, 2, 1)
+(1, 3)
+(2, 1, 1)
+(2, 2)
+(3, 1)
+
+Note that different sequences are counted as different combinations.
+Therefore the output is 7.
+
+SampleInput:
+    1 2 3
+    4
+SampleOutput:
+    7
+*/
+int combinationSumIV(){
+    vector<int> nums ;
+    int k = 0;
+
+    int tem = 0;
+    while (1) {
+        cin >> tem;
+        nums.push_back(tem);
+        if(cin.get() == '\n') break;
+    }
+    cin >> k;
+
+    vector<int> dp( k + 1 , 1 );
+
+    /* boundary condition */
+    dp[0] = 1;
+    dp[1] = 1;
+
+    for(int i = 2 ; i < dp.size() + 1 ; i ++ ){
+        for (int j = 0 ; j < nums.size() ; j ++ ){
+            if()
+                dp[i] += dp[i - nums[j]];
+        }
+    }
+
+
+    return dp[nums.size() + 1];
+}
