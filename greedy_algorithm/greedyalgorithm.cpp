@@ -501,17 +501,17 @@ bool cmp(const pair<int , int > &a , const pair<int, int> &b){
     6.将当前加油站油量添加至最大堆.
 */
 int Greedyalgorithm::getMinimumStop(int L , int P,                          //L为起点到终点的距离,P为起点初始的汽油量
-                                    std::vector<pair<int , int>> &stop){    //pair<加油站至终点的距离 , 加油站汽油量>
+                                    std::vector<pair<int , int>> &stop){    // pair < 加油站至终点的距离 , 加油站汽油量 >
     std::priority_queue<int> Q;                                             //存储油量的最大堆
     int result = 0;                                                         //记录加过几次油变量
 
     stop.push_back(std::make_pair(0,0));                                    //将终点作为一个停靠点,添加至stop数组
-    std::sort(stop.begin(),stop.end() , cmp );                              //以停靠点至终点的距离 从大到小 进行排序
+    std::sort(stop.begin(),stop.end(),cmp );                                //以停靠点至终点的距离 从大到小 进行排序
     for(int i = 0 ; i < stop.size() ; i ++){                                //遍历各个停靠点
-        int dis = L - stop[i].first;                                        //当前要走的距离即为当前终点距离L减去下一个停靠站点至终点距离
+        int dis = L - stop[i].first;                                        //当前要走的距离: 为当前终点距离L减去下一个停靠站点至终点距离
 
         while( !Q.empty() &&  P < dis  ){
-            P += Q .top();
+            P +=Q .top();
             Q.pop();
             result ++;
         }
@@ -523,10 +523,18 @@ int Greedyalgorithm::getMinimumStop(int L , int P,                          //L�
     }
     return result;
 
-
 }
 
 
+int Greedyalgorithm::getMinimumStop(int L , int P,                          //L为起点到终点的距离,P为起点初始的汽油量
+                                    std::vector<pair<int , int>> &stop){
+    std::priority_queue<int>   Q;
+    int result;
+
+
+    stop.push_back(make_pair(0,0));
+
+}
 
 
 
@@ -589,7 +597,7 @@ sell_po 设为 buy_po 下一个点,也是依次向前探:
 完成一次买和卖,存入maxgain中
 
 */
-int  Greedyalgorithm::bestBuyAndSellStock2(){
+int  bestBuyAndSellStock2(){
     vector<int> prices;
     prices.push_back(0);    //use 0 to take up position
 
@@ -642,3 +650,77 @@ int  Greedyalgorithm::bestBuyAndSellStock2(){
     return maxgain;
 
 }
+
+
+
+
+/*
+LeetCode 860. Lemonade Change
+
+Description：
+At a lemonade stand, each lemonade costs $5.
+
+Customers are standing in a queue to buy from you, and order one at a time (in the order specified by bills).
+Each customer will only buy one lemonade and pay with either a $5, $10, or $20 bill.
+You must provide the correct change to each customer, so that the net transaction is that the customer pays $5.
+Note that you don’t have any change in hand at first.
+Return true if and only if you can provide every customer with correct change.
+
+Example 1:
+
+Input: [5,5,5,10,20]
+Output: true
+Explanation:
+From the first 3 customers, we collect three $5 bills in order.
+From the fourth customer, we collect a $10 bill and give back a $5.
+From the fifth customer, we give a $10 bill and a $5 bill.
+Since all customers got correct change, we output true.
+
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+
+Example 2:
+
+Input: [5,5,10]
+Output: true
+
+    1
+    2
+
+Example 3:
+
+Input: [10,10]
+Output: false
+
+    1
+    2
+
+Example 4:
+
+Input: [5,5,10,10,20]
+Output: false
+Explanation:
+From the first two customers in order, we collect two $5 bills.
+For the next two customers in order, we collect a $10 bill and give back a $5 bill.
+For the last customer, we can't give change of $15 back because we only have two $10 bills.
+Since not every customer received correct change, the answer is false.
+
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+
+Note:
+
+    0 <= bills.length <= 10000
+    bills[i] will be either 5, 10, or 20.
+
+*/
