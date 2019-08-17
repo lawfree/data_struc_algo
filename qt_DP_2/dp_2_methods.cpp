@@ -1319,7 +1319,7 @@ int combinationSumIV(){
     }
     cin >> k;
 
-    vector<int> dp( k + 1 , 1 );
+    vector<int> dp( k + 1 , 0 );
 
     /* boundary condition */
     dp[0] = 1;
@@ -1327,11 +1327,146 @@ int combinationSumIV(){
 
     for(int i = 2 ; i < dp.size() + 1 ; i ++ ){
         for (int j = 0 ; j < nums.size() ; j ++ ){
-            if()
+            if( i - nums[j] >= 0)
                 dp[i] += dp[i - nums[j]];
         }
+       // cout << i << " " << dp[i] << endl;
     }
 
 
-    return dp[nums.size() + 1];
+    return dp[k];
 }
+
+/*
+[LeetCode] 718. Maximum Length of Repeated Subarray
+
+Given two integer arrays A and B, return the maximum length of an subarray that appears in both arrays.
+
+Example 1:
+Input:
+A: [1,2,3,2,1]
+B: [3,2,1,4,7]
+Output: 3
+Explanation:
+The repeated subarray with maximum length is [3, 2, 1].
+Note:
+1 <= len(A), len(B) <= 1000
+0 <= A[i], B[i] < 100
+
+SampleInput:
+    1 2 3 2 1
+    3 2 1 4 7
+SamepleOutput:
+    3
+
+难度 ： medium
+*/
+int maxLenOfSubarray(){
+    vector<int> A,B;
+
+    int tem = 0;
+    while (1) {
+        cin >> tem;
+        A.push_back(tem);
+        if(cin.get() == '\n')   break;
+    }
+
+    while (1) {
+        cin >> tem;
+        B.push_back(tem);
+        if(cin.get() == '\n')   break;
+    }
+
+    int m = A.size();
+    int n = B.size();
+
+    vector<vector<int> > dp( m + 1 , vector<int>(n + 1, 0) );  //dp[i][j] 表示A中前i个和B中前j个所能得到的最长公共序列length
+    int res = 0;
+
+    /* boundary condition */
+    for (int i = 1 ; i <= m ; i++ )
+        dp[i][0] = 0;
+    for (int j = 1 ; j < n ; j ++)
+        dp[0][j] = 0;
+
+    /* transfer status */
+    for (int i = 1 ; i <= m ; i ++){
+        for (int j = 1 ; j <= n ; j ++){
+            if (A[i -1] == B[j - 1])
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            res = max (dp[i][j] , res);
+        }
+    }
+    return res;
+
+}
+
+/*
+72. [LeetCode] Edit Distance 编辑距离
+
+Given two words word1 and word2, find the minimum number of operations required to convert word1 to word2.
+
+You have the following 3 operations permitted on a word:
+
+    Insert a character
+    Delete a character
+    Replace a character
+
+Example 1:
+Input:
+    word1 = "horse", word2 = "ros"
+Output:
+    3
+Explanation:
+    horse -> rorse (replace 'h' with 'r')
+    rorse -> rose (remove 'r')
+    rose -> ros (remove 'e')
+
+Example 2:
+Input:
+    word1 = "intention", word2 = "execution"
+Output:
+    5
+Explanation:
+    intention -> inention (remove 't')
+    inention -> enention (replace 'i' with 'e')
+    enention -> exention (replace 'n' with 'x')
+    exention -> exection (replace 'n' with 'c')
+    exection -> execution (insert 'u')
+
+SampleInput:
+    horse ros
+SamepleInput:
+    3
+*/
+
+/*
+
+
+*/
+int editDistance(){
+    string a , b;
+    cin >> a >> b;
+
+    int m = a.size(),n = b.size();
+    vector< vector<int> > dp ( m + 1 , vector<int>(n + 1 , 0)  );
+
+    /* boundary condition */
+    for(int i = 1 ; i <= m ; i ++ )
+        dp[i][0] = i;
+    for(int j = 1 ; j <= n  ; j ++ )
+        dp[0][j] = j;
+
+    /* transfer status */
+    for(int i = 1 ; i <= m  ; i ++){
+        for (int j = 1 ; j <= n  ; j ++){
+            if(a[i - 1] == b[j - 1])
+                dp[i][j] = dp[i - 1][j - 1];
+            else
+                dp[i][j] = min( dp[i -1][j] + 1, min (  dp[i][j - 1] +1 , dp[i - 1][j -1]+1 )  );
+        }
+    }
+
+    return dp[m ][n ];
+}
+

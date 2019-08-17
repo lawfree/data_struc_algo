@@ -44,4 +44,8 @@ bool isSubsequence();
 
 int combinationSumIV();
 
+int maxLenOfSubarray();
+
+int editDistance();
+
 #endif // DP_2_METHODS_H
