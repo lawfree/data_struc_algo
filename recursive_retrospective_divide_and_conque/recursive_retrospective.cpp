@@ -260,3 +260,48 @@ There exist two distinct solutions to the 4-queens puzzle:
       ".Q.."]
     ]
 */
+void put_down_the_queen(int x , int y , vector< vector<int> > &mark){
+
+    static const int dx[] = {-1,1, 0 ,0 , -1, -1, 1 , 1};
+    static const int dx[] = {0 ,0, -1,1 , -1,  1, -1, 1};
+
+    mark[x][y] = 1 ; //(x, y) set queen and mark it
+    for(int i = 1 ; i < mark.size() ; i ++){
+        for(int j = 1 ; j < mark.size() ; j ++){
+            int new_x = x + i * dx[j];
+            int new_y = y + i * dy[j];
+            if(new_x >= 0 && new_x < mark.size() && new_y >= 0 && new_y < mark.size())
+                mark[new_x][new_y] = 1;
+        }
+    }
+}
+
+/*
+N皇后问题,对于N*N的棋盘,每行都要放置一个且只能放置一个皇后
+利用递归对棋盘的每一行放置皇后,放置时,按列顺序寻找可以放置皇后的列,若可以放置皇后,放皇后于该位置,并更新mark标记数组,
+递归进行下一行的皇后放置位置;
+当该次递归结束后,恢复mark数组,并尝试下一个可能放皇后的列.
+当递归可以完成N行的N个皇后放置,则将该结果保存并返回.
+*/
+vector<vector <string>> solveNQueens(int n){
+    vector<vector<string> > result;             //save the end result;
+    vector<vector<int> > mark;                  //mark if could set queen
+    vector<std::string> location;                    //save a result,when finishing a time,put location to result
+
+    for(int i = 0 ; i < n ; i ++){
+        mark.push_back(vector <int> ());
+        for(int j = 0 ; j < n ; j ++){
+            mark[i].push_back(0);
+        }
+        location.push_back("");
+        location[i].append(n , '.');
+    }
+    generateNQueens(0, n , location , result , mark);
+    return result;
+}
+void generateNQueens(int k , int n ,
+                     vector<string> &location ,
+                     vector<vector<string> > &result ,
+                     vector<vector <int> >  &mark){
+
+}
