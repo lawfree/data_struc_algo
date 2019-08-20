@@ -6,6 +6,49 @@ Greedyalgorithm::Greedyalgorithm()
 }
 
 /*
+1. 贪心法（Greedy Algorithm）定义
+
+        求解最优化问题的算法通常需要经过一系列的步骤，在每个步骤都面临多种选择；
+
+        贪心法就是这样的算法：它在每个决策点作出在当时看来最佳的选择，即总是遵循某种规则，做出局部最优的选择，以推导出全局最优解（局部最优解->全局最优解）
+
+2. 对贪心法的深入理解
+
+        （1）原理：一种启发式策略，在每个决策点作出在当时看来最佳的选择
+
+        （2）求解最优化问题的两个关键要素：贪心选择性质+最优子结构
+
+             ①贪心选择性质：进行选择时，直接做出在当前问题中看来最优的选择，而不必考虑子问题的解；
+
+             ②最优子结构：如果一个问题的最优解包含其子问题的最优解，则称此问题具有最优子结构性质
+
+        （3）解题关键：贪心策略的选择
+
+        贪心算法不是对所有问题都能得到整体最优解的，因此选择的贪心策略必须具备无后效性，即某个状态以前的过程不会影响以后的状态，只与当前状态有关。
+
+        （4）一般步骤：
+
+            ①建立数学模型来描述最优化问题；
+
+            ②把求解的最优化问题转化为这样的形式：对其做出一次选择后，只剩下一个子问题需要求解；
+
+            ③证明做出贪心选择后：
+
+                1°原问题总是存在全局最优解，即贪心选择始终安全；
+
+                2°剩余子问题的局部最优解与贪心选择组合，即可得到原问题的全局最优解。
+
+                并完成2°
+
+3. 贪心法与动态规划
+    最优解问题大部分都可以拆分成一个个的子问题，把解空间的遍历视作对子问题树的遍历，则以某种形式对树整个的遍历一遍就可以求出最优解，大部分情况下这是不可行的。
+    贪心算法和动态规划本质上是对子问题树的一种修剪，两种算法要求问题都具有的一个性质就是子问题最优性(组成最优解的每一个子问题的解，对于这个子问题本身肯定也是最优的)。
+    态规划方法代表了这一类问题的一般解法，我们自底向上构造子问题的解，对每一个子树的根，求出下面每一个叶子的值，并且以其中的最优值作为自身的值，其它的值舍弃。
+    而贪心算法是动态规划方法的一个特例，可以证明每一个子树的根的值不取决于下面叶子的值，而只取决于当前问题的状况。换句话说，不需要知道一个节点所有子树的情况，就可以求出这个节点的值。
+    由于贪心算法的这个特性，它对解空间树的遍历不需要自底向上，而只需要自根开始，选择最优的路，一直走到底就可以了。
+*/
+
+/*
 LeetCode 455 Assign Cookies
 
 
@@ -526,18 +569,6 @@ int Greedyalgorithm::getMinimumStop(int L , int P,                          //L�
 }
 
 
-int Greedyalgorithm::getMinimumStop(int L , int P,                          //L为起点到终点的距离,P为起点初始的汽油量
-                                    std::vector<pair<int , int>> &stop){
-    std::priority_queue<int>   Q;
-    int result;
-
-
-    stop.push_back(make_pair(0,0));
-
-}
-
-
-
 /*
 LeetCode 122. Best Time to Buy and Sell Stock
 
@@ -597,7 +628,7 @@ sell_po 设为 buy_po 下一个点,也是依次向前探:
 完成一次买和卖,存入maxgain中
 
 */
-int  bestBuyAndSellStock2(){
+int Greedyalgorithm::bestBuyAndSellStock2(){
     vector<int> prices;
     prices.push_back(0);    //use 0 to take up position
 
@@ -657,70 +688,194 @@ int  bestBuyAndSellStock2(){
 /*
 LeetCode 860. Lemonade Change
 
-Description：
-At a lemonade stand, each lemonade costs $5.
+在柠檬水摊上，每一杯柠檬水的售价为 5 美元。
+顾客排队购买你的产品，（按账单 bills 支付的顺序）一次购买一杯。
+每位顾客只买一杯柠檬水，然后向你付 5 美元、10 美元或 20 美元。你必须给每个顾客正确找零，也就是说净交易是每位顾客向你支付 5 美元。
+注意，一开始你手头没有任何零钱。
+如果你能给每位顾客正确找零，返回 true ，否则返回 false 。
 
-Customers are standing in a queue to buy from you, and order one at a time (in the order specified by bills).
-Each customer will only buy one lemonade and pay with either a $5, $10, or $20 bill.
-You must provide the correct change to each customer, so that the net transaction is that the customer pays $5.
-Note that you don’t have any change in hand at first.
-Return true if and only if you can provide every customer with correct change.
+示例 1：
+    输入：[5,5,5,10,20]
+    输出：true
+解释：
+    前 3 位顾客那里，我们按顺序收取 3 张 5 美元的钞票。
+    第 4 位顾客那里，我们收取一张 10 美元的钞票，并返还 5 美元。
+    第 5 位顾客那里，我们找还一张 10 美元的钞票和一张 5 美元的钞票。
+    由于所有客户都得到了正确的找零，所以我们输出 true。
 
-Example 1:
+示例 2：
+    输入：[5,5,10]
+    输出：true
 
-Input: [5,5,5,10,20]
-Output: true
-Explanation:
-From the first 3 customers, we collect three $5 bills in order.
-From the fourth customer, we collect a $10 bill and give back a $5.
-From the fifth customer, we give a $10 bill and a $5 bill.
-Since all customers got correct change, we output true.
+示例 3：
+    输入：[10,10]
+    输出：false
 
-    1
-    2
-    3
-    4
-    5
-    6
-    7
+示例 4：
+    输入：[5,5,10,10,20]
+    输出：false
+解释：
+    前 2 位顾客那里，我们按顺序收取 2 张 5 美元的钞票。
+    对于接下来的 2 位顾客，我们收取一张 10 美元的钞票，然后返还 5 美元。
+    对于最后一位顾客，我们无法退回 15 美元，因为我们现在只有两张 10 美元的钞票。
+    由于不是每位顾客都得到了正确的找零，所以答案是 false。
 
-Example 2:
 
-Input: [5,5,10]
-Output: true
-
-    1
-    2
-
-Example 3:
-
-Input: [10,10]
-Output: false
-
-    1
-    2
-
-Example 4:
-
-Input: [5,5,10,10,20]
-Output: false
-Explanation:
-From the first two customers in order, we collect two $5 bills.
-For the next two customers in order, we collect a $10 bill and give back a $5 bill.
-For the last customer, we can't give change of $15 back because we only have two $10 bills.
-Since not every customer received correct change, the answer is false.
-
-    1
-    2
-    3
-    4
-    5
-    6
-    7
-
-Note:
+提示：
 
     0 <= bills.length <= 10000
-    bills[i] will be either 5, 10, or 20.
+    bills[i] 不是 5 就是 10 或是 20
 
+*/
+bool  Greedyalgorithm::lemonadeChange(){
+    vector<int> bills;          //save the input
+
+    map<int , int>  logs;
+    logs.insert( make_pair(5,  0));
+    logs.insert( make_pair(10, 0));
+    logs.insert( make_pair(20, 0));
+
+
+
+    /* input */
+    int tem = 0;
+    while (1) {
+        cin >> tem;
+        bills.push_back(tem);
+        if (cin.get() == '\n')  break;
+    }
+
+    for (int i = 0; i < bills.size() ; i ++){
+        switch (bills[i]) {
+        case 5:
+            logs[5] ++;
+            break;
+        case 10:
+            if(logs[5] > 0){
+                logs[5] -- ;
+                logs[10] ++;
+            }else return false;
+            break;
+        case 20:
+            if(logs[10] > 0 && logs[5] > 0){
+                logs[10] -- ;
+                logs[5] --;
+            }else if( logs[5] >= 3 )
+                logs[5] -= 3;
+            else
+                return false;
+            break;
+        default:
+            break;
+        }
+    }
+    return true;
+}
+
+/*
+[LeetCode]406.  Queue Reconstruction by Height 根据高度重建队列
+
+Suppose you have a random list of people standing in a queue.
+Each person is described by a pair of integers(h, k), where h is the height of the person and k is the number of people
+in front of this person who have a height greater than or equal to h. Write an algorithm to reconstruct the queue.
+
+Note:
+The number of people is less than 1,100.
+
+Example
+
+Input:
+[[7,0], [4,4], [7,1], [5,0], [6,1], [5,2]]
+
+Output:
+[[5,0], [7,0], [5,2], [6,1], [4,4], [7,1]]
+*/
+//vector<vector<int>> Greedyalgorithm::reconstructQueue(vector<vector<int>>& people) {
+//    vector<vector<int>> res;
+//    sort(people.begin(), people.end(), cmpheight);
+
+////    for (pair<int , int> i : people)
+//    for (vector<vector<int>>::iterator i = people.begin(); i < people.end() ; i ++)
+//        res.insert(res.begin() + i[1] , i);
+
+//    return res;
+//}
+// bool cmpheight(pair<int,int> a,pair<int,int> b){
+//    return a.first > b.first || (a.first == b.first && a.second < b.second);
+//}
+
+
+/*
+LeetCode 738.
+
+给定一个非负整数 N，找出小于或等于 N 的最大的整数，同时这个整数需要满足其各个位数上的数字是单调递增。
+
+（当且仅当每个相邻位数上的数字 x 和 y 满足 x <= y 时，我们称这个整数是单调递增的。）
+
+示例 1:
+
+输入: N = 10
+输出: 9
+
+示例 2:
+
+输入: N = 1234
+输出: 1234
+
+示例 3:
+
+输入: N = 332
+输出: 299
+
+说明: N 是在 [0, 10^9] 范围内的一个整数。
+*/
+
+/*
+注意这道题必须从后面往前遍历,因为如332,预期为299,若从前往后,则会为329
+*/
+int Greedyalgorithm::monotoneIncreasingDigits( ) {
+    cin >> N;
+    string str_N = to_string(N);
+    int n = str_N.size();
+    int pos = n;
+    for (int i = n - 1;i > 0; i--) {
+        if (str_N[i] >= str_N[i-1])
+            continue;
+        str_N[i-1] = str_N[i-1] - 1;
+        pos = i;
+    }
+    for (int i = pos; i < n; i++) {
+        str_N[i] = '9';
+    }
+    return stoi(str_N);
+}
+
+
+/*
+
+LeetCode 870.Advantage Shuffle
+
+给定两个大小相等的数组 A 和 B，A 相对于 B 的优势可以用满足 A[i] > B[i] 的索引 i 的数目来描述。
+
+返回 A 的任意排列，使其相对于 B 的优势最大化。
+
+
+
+示例 1：
+
+输入：A = [2,7,11,15], B = [1,10,4,11]
+输出：[2,11,7,15]
+
+示例 2：
+
+输入：A = [12,24,8,32], B = [13,25,32,11]
+输出：[24,32,8,12]
+
+
+
+提示：
+
+    1 <= A.length = B.length <= 10000
+    0 <= A[i] <= 10^9
+    0 <= B[i] <= 10^9
 */
