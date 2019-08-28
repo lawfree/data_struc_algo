@@ -3,15 +3,19 @@
 void mergeTwoSubvec(vector<int> &vec1, vector<int> &vec2 , vector<int> &vec){
     int i = 0, j = 0;
     while (i < vec1.size() && j < vec2.size()) {
-        if(vec1[i] < vec2[j])
-            vec.push_back(vec1[i ++ ]);
-        else
-            vec.push_back(vec2[j ++ ]);
+        if(vec1[i] <= vec2[j]){
+            vec.push_back(vec1[i]);
+            i ++;
+        }
+        else{
+            vec.push_back(vec2[j]);
+            j ++;
+        }
     }
     for(; i < vec1.size(); i ++)
         vec.push_back(vec1[i]);
     for(; j < vec2.size(); j ++)
-        vec.push_back(vec2[j ++]);
+        vec.push_back(vec2[j]);
 
 }
 void mergeSort(vector<int> &vec){
