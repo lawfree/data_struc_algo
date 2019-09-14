@@ -34,4 +34,18 @@ int numOfAritSlices();
 
 int deleteSumForTwoStrings();
 
+int subarrProductLessThanK();
+
+int keysKeyboard();
+
+bool predictWinner();
+
+bool isSubsequence();
+
+int combinationSumIV();
+
+int maxLenOfSubarray();
+
+int editDistance();
+
 #endif // DP_2_METHODS_H

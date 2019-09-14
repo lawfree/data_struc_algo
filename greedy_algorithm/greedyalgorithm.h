@@ -4,6 +4,8 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
+#include <queue>
+#include <map>
 
 using namespace std;
 
@@ -25,10 +27,19 @@ public:
 
     int findMinArrowShots(vector<pair<int, int>>& points);
 
-	int  bestBuyAndSellStock2();
+    int getMinimumStop(int L , int P, std::vector<pair<int , int>> &stop) ;
+
+    int bestBuyAndSellStock2();
+
+    bool lemonadeChange();
+
+    vector<vector<int>> reconstructQueue(vector<vector<int>>& people) ;
+
+    int monotoneIncreasingDigits();
 
 };
 
-   bool  cmp(const pair<int , int > &a , const pair<int, int> &b);
+bool  cmp(const pair<int , int > &a , const pair<int, int> &b);
+bool cmpheight(pair<int,int> a,pair<int,int> b);
 
 #endif // GREEDYALGORITHM_H

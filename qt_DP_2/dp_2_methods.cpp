@@ -1019,4 +1019,454 @@ Note:
 0 < nums[i] < 1000.
 0 <= k < 10^6.
 
+SampleInput:
+    10 5 2 6
+    100
+SampleOutput:
+    8
 */
+int subarrProductLessThanK(){
+    vector<int> nums;
+    int k = 0;          //target number
+    int res = 0;        //count the result
+
+    /* input  */
+    int tem = 0;
+    while (1) {
+        cin >> tem ;
+        nums.push_back(tem);
+        if(cin.get() == '\n') break;
+    }
+     cin >> k ;
+
+    int len = nums.size();
+    vector < vector< int > > dp( len + 1 , vector<int>(len +1 , 0) );
+
+    /* boundary condition */
+    for (int i = 1 ; i <= len; i ++ ){
+        dp[i][i] = nums[i - 1];
+        if (dp[i][i] < k) res ++ ;
+    }
+
+    /* transfer equation */
+    for (int i = 1 ;  i < len ; i ++){
+        for (int j = i + 1 ; j <= len ; j ++){
+            dp[i][j] = dp [i][j - 1] * nums[j -1 ];
+            if (dp[i][j] < k) res ++;
+            else break;
+        }
+    }
+
+    return res;
+}
+//     repo init --repo-url ssh://git@www.rockchip.com.cn/repo/rk/tools/repo -u ssh://git@www.rockchip.com.cn/linux/rk/platform/manifests -b linux -m rk3399_linux_release.xml
+
+
+/*
+LeetCode 650.  Keys Keyboard
+
+
+Initially on a notepad only one character 'A' is present. You can perform two operations on this notepad for each step:
+
+Copy All: You can copy all the characters present on the notepad (partial copy is not allowed).
+Paste: You can paste the characters which are copied last time.
+Given a number n. You have to get exactly n 'A' on the notepad by performing the minimum number of steps permitted.
+Output the minimum number of steps to get n 'A'.
+
+Example 1:
+Input: 3
+Output: 3
+Explanation:
+Intitally, we have one character 'A'.
+In step 1, we use Copy All operation.
+In step 2, we use Paste operation to get 'AA'.
+In step 3, we use Paste operation to get 'AAA'.
+Note:
+The n will be in the range [1, 1000].
+
+*/
+int keysKeyboard(){
+    int num = 0 ;                   //num saves the number of
+    cin >> num;
+
+    vector<int> dp(num + 1 , 0);    //dp[i] means for i character 'A', we need dp[i] to get it.
+
+    /* boundary condition */
+    dp[1] = 0;
+    dp[2] = 2;
+    dp[3] = 3;
+
+    for(int i = 4 ; i <= num ; i ++ ){
+        dp[i] = i ;
+        for ( int j = 2 ; j <= i/2 ; j ++ ){
+            if( i % j == 0)
+                dp[i] = min ( dp[i] , dp[j] + i / j );
+        }
+    }
+    return dp[num];
+}
+
+/*
+486. Predict the Winner
+
+Given an array of scores that are non-negative integers.
+ Player 1 picks one of the numbers from either end of the array followed by the player 2 and then player 1 and so on.
+ Each time a player picks a number, that number will not be available for the next player.
+This continues until all the scores have been chosen. The player with the maximum score wins.
+
+Given an array of scores, predict whether player 1 is the winner.
+You can assume each player plays to maximize his score.
+
+Example 1:
+
+Input: [1, 5, 2]
+Output: False
+Explanation: Initially, player 1 can choose between 1 and 2.
+If he chooses 2 (or 1), then player 2 can choose from 1 (or 2) and 5. If player 2 chooses 5, then player 1 will be left with 1 (or 2).
+So, final score of player 1 is 1 + 2 = 3, and player 2 is 5.
+Hence, player 1 will never be the winner and you need to return False.
+
+Example 2:
+
+Input: [1, 5, 233, 7]
+Output: True
+Explanation: Player 1 first chooses 1. Then player 2 have to choose between 5 and 7. No matter which number player 2 choose, player 1 can choose 233.
+Finally, player 1 has more score (234) than player 2 (12), so you need to return True representing player1 can win.
+
+Note:
+
+    1 <= length of the array <= 20.
+    Any scores in the given array are non-negative integers and will not exceed 10,000,000.
+    If the scores of both players are equal, then player 1 is still the winner.
+
+SampleInput:
+    1 5 233 7
+SampleOutput:
+    true
+
+*/
+
+bool predictWinner(){
+    vector<int> nums;
+
+    int tem = 0;
+    while (1) {
+        cin >> tem;
+        nums.push_back(tem);
+        if (cin.get() == '\n')  break;
+    }
+
+    int n = nums.size();
+    vector <vector<int>> dp(n, vector<int>(n , 0));
+
+    /* boundary */
+    for( int i = 0 ; i < n ; i ++)
+        dp[i][i] = nums[i];
+
+    /* transfer status */
+    for(int len = 1 ; len < n ; len ++){
+        for(int i = 0 , j = len ; j < n; i ++ , j++){
+            dp[i][j] = max(nums[i] - dp[i + 1][j], nums[j] - dp[i][j -1]);
+        }
+    }
+    return dp[0][n - 1] >= 0;
+
+}
+
+
+
+/*
+[LeetCode] Is Subsequence 是子序列
+
+
+Given a string s and a string t, check if s is subsequence of t.
+You may assume that there is only lower case English letters in both s and t.
+t is potentially a very long (length ~= 500,000) string, and s is a short string (<=100).
+
+A subsequence of a string is a new string which is formed from the original string by deleting some (can be none) of
+the characters without disturbing the relative positions of the remaining characters. (ie, "ace" is a subsequence of "abcde" while "aec" is not).
+
+Example 1:
+s = "abc", t = "ahbgdc"
+Return true.
+
+Example 2:
+s = "axc", t = "ahbgdc"
+Return false.
+
+Follow up:
+If there are lots of incoming S, say S1, S2, ... , Sk where k >= 1B, and you want to check one by one to see if T has its subsequence.
+In this scenario, how would you change your code?
+
+Credits:
+Special thanks to @pbrother for adding this problem and creating all test cases.
+
+*/
+
+bool isSubsequence(){
+    string s, t;
+    cin >> s >> t;
+
+    int m = s.size();
+    int n = t.size();
+
+    int i =0,j = 0;
+    while (i < m && j < n) {
+        if(s[i] == t[j]){
+            i++ ; j ++;
+        }
+        else
+            j ++;
+    }
+    if (i == m) return true;
+    return false;
+}
+
+
+/*
+LeetCode 39. Combination Sum I
+
+Given a set of candidate numbers (C) (without duplicates) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
+The same repeated number may be chosen from C unlimited number of times.
+
+Note:
+All numbers (including target) will be positive integers.
+The solution set must not contain duplicate combinations.
+For example, given candidate set [2, 3, 6, 7] and target 7,
+A solution set is:
+[
+  [7],
+  [2, 2, 3]
+]
+*/
+
+/*
+LeetCode 40. Combination Sum II
+
+Given a collection of candidate numbers (C) and a target number (T), find all unique combinations in C where the candidate numbers sums to T.
+Each number in C may only be used once in the combination.
+
+Note:
+All numbers (including target) will be positive integers.
+The solution set must not contain duplicate combinations.
+For example, given candidate set [10, 1, 2, 7, 6, 1, 5] and target 8,
+A solution set is:
+[
+  [1, 7],
+  [1, 2, 5],
+  [2, 6],
+  [1, 1, 6]
+]
+*/
+
+/*
+
+LeetCode 216. Combination Sum III
+
+Find all possible combinations of k numbers that add up to a number n, given that only numbers from 1 to 9 can be used and each combination should be a unique set of numbers.
+
+Example 1:
+Input:
+    k = 3,  n = 7
+Output:
+    [[1,2,4]]
+
+
+Example 2:
+Input:
+    k = 3,  n = 9
+Output:
+    [[1,2,6], [1,3,5], [2,3,4]]
+*/
+
+/*
+377. Combination Sum IV
+
+Given an integer array with all positive numbers and no duplicates, find the number of possible combinations that add up to a positive integer target.
+
+Example:
+
+nums = [1, 2, 3]
+target = 4
+
+The possible combination ways are:
+(1, 1, 1, 1)
+(1, 1, 2)
+(1, 2, 1)
+(1, 3)
+(2, 1, 1)
+(2, 2)
+(3, 1)
+
+Note that different sequences are counted as different combinations.
+Therefore the output is 7.
+
+SampleInput:
+    1 2 3
+    4
+SampleOutput:
+    7
+*/
+int combinationSumIV(){
+    vector<int> nums ;
+    int k = 0;
+
+    int tem = 0;
+    while (1) {
+        cin >> tem;
+        nums.push_back(tem);
+        if(cin.get() == '\n') break;
+    }
+    cin >> k;
+
+    vector<int> dp( k + 1 , 0 );
+
+    /* boundary condition */
+    dp[0] = 1;
+    dp[1] = 1;
+
+    for(int i = 2 ; i < dp.size() + 1 ; i ++ ){
+        for (int j = 0 ; j < nums.size() ; j ++ ){
+            if( i - nums[j] >= 0)
+                dp[i] += dp[i - nums[j]];
+        }
+       // cout << i << " " << dp[i] << endl;
+    }
+
+
+    return dp[k];
+}
+
+/*
+[LeetCode] 718. Maximum Length of Repeated Subarray
+
+Given two integer arrays A and B, return the maximum length of an subarray that appears in both arrays.
+
+Example 1:
+Input:
+A: [1,2,3,2,1]
+B: [3,2,1,4,7]
+Output: 3
+Explanation:
+The repeated subarray with maximum length is [3, 2, 1].
+Note:
+1 <= len(A), len(B) <= 1000
+0 <= A[i], B[i] < 100
+
+SampleInput:
+    1 2 3 2 1
+    3 2 1 4 7
+SamepleOutput:
+    3
+
+难度 ： medium
+*/
+int maxLenOfSubarray(){
+    vector<int> A,B;
+
+    int tem = 0;
+    while (1) {
+        cin >> tem;
+        A.push_back(tem);
+        if(cin.get() == '\n')   break;
+    }
+
+    while (1) {
+        cin >> tem;
+        B.push_back(tem);
+        if(cin.get() == '\n')   break;
+    }
+
+    int m = A.size();
+    int n = B.size();
+
+    vector<vector<int> > dp( m + 1 , vector<int>(n + 1, 0) );  //dp[i][j] 表示A中前i个和B中前j个所能得到的最长公共序列length
+    int res = 0;
+
+    /* boundary condition */
+    for (int i = 1 ; i <= m ; i++ )
+        dp[i][0] = 0;
+    for (int j = 1 ; j < n ; j ++)
+        dp[0][j] = 0;
+
+    /* transfer status */
+    for (int i = 1 ; i <= m ; i ++){
+        for (int j = 1 ; j <= n ; j ++){
+            if (A[i -1] == B[j - 1])
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            res = max (dp[i][j] , res);
+        }
+    }
+    return res;
+
+}
+
+/*
+72. [LeetCode] Edit Distance 编辑距离
+
+Given two words word1 and word2, find the minimum number of operations required to convert word1 to word2.
+
+You have the following 3 operations permitted on a word:
+
+    Insert a character
+    Delete a character
+    Replace a character
+
+Example 1:
+Input:
+    word1 = "horse", word2 = "ros"
+Output:
+    3
+Explanation:
+    horse -> rorse (replace 'h' with 'r')
+    rorse -> rose (remove 'r')
+    rose -> ros (remove 'e')
+
+Example 2:
+Input:
+    word1 = "intention", word2 = "execution"
+Output:
+    5
+Explanation:
+    intention -> inention (remove 't')
+    inention -> enention (replace 'i' with 'e')
+    enention -> exention (replace 'n' with 'x')
+    exention -> exection (replace 'n' with 'c')
+    exection -> execution (insert 'u')
+
+SampleInput:
+    horse ros
+SamepleInput:
+    3
+*/
+
+/*
+
+
+*/
+int editDistance(){
+    string a , b;
+    cin >> a >> b;
+
+    int m = a.size(),n = b.size();
+    vector< vector<int> > dp ( m + 1 , vector<int>(n + 1 , 0)  );
+
+    /* boundary condition */
+    for(int i = 1 ; i <= m ; i ++ )
+        dp[i][0] = i;
+    for(int j = 1 ; j <= n  ; j ++ )
+        dp[0][j] = j;
+
+    /* transfer status */
+    for(int i = 1 ; i <= m  ; i ++){
+        for (int j = 1 ; j <= n  ; j ++){
+            if(a[i - 1] == b[j - 1])
+                dp[i][j] = dp[i - 1][j - 1];
+            else
+                dp[i][j] = min( dp[i -1][j] + 1, min (  dp[i][j - 1] +1 , dp[i - 1][j -1]+1 )  );
+        }
+    }
+
+    return dp[m ][n ];
+}
+
