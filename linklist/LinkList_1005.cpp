@@ -15,6 +15,14 @@ struct ListNode
     ListNode(int x): val(x), next(NULL) {}
 };
 
+
+struct RandomListNode       //带有随机指针的链表节点
+{
+    int label;
+    RandomListNode *next, *random;
+    RandomListNode(int x): label(x) , next(NULL), random(NULL) {}
+};
+
 class MyLinklist
 {
 public:
@@ -216,6 +224,21 @@ public:
 
     }
 
+    /* LeetCode 86. Partition List
+     *
+     *  已知链表头指针head与数值x,将所有小于x的节点放在大于或等于x的节点前,且保持这些节点的原来相对位置
+     */
+    ListNode * partition(ListNode *head , int x){
+
+    }
+
+    /* LeetCdde 138. Copy List with Random Pointer
+     *
+     *      已知一个复杂链表,节点中有一个指向本链表任意某个节点的随机指针,求这个链表的深度拷贝
+     */
+    RandomListNode *copyRandomList(RandomListNode *head){
+
+    }
 
 
 };
