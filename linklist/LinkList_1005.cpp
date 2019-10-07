@@ -13,6 +13,7 @@ struct ListNode
     int val;
     ListNode *next;
     ListNode(int x): val(x), next(NULL) {}
+    ListNode(): val(int(NULL)), next(NULL){}
 };
 
 
@@ -229,19 +230,168 @@ public:
      *  已知链表头指针head与数值x,将所有小于x的节点放在大于或等于x的节点前,且保持这些节点的原来相对位置
      */
     ListNode * partition(ListNode *head , int x){
+        ListNode *less_head = new ListNode(); ListNode *q1 = less_head;
+        ListNode *more_head = new ListNode(); ListNode *q2 = more_head;
+        ListNode *pre = head, *p = head ->next;
 
+        while (p) {
+            if(pre -> val < x){
+                q1 -> next = pre;
+                q1 = q1 -> next;
+            }else{
+                q2 -> next = pre;
+                q2 = q2->next ;
+            }
+            pre = p ; p = pre -> next;
+        }
+        q1 -> next = more_head -> next;
+        return less_head -> next;
     }
 
     /* LeetCdde 138. Copy List with Random Pointer
      *
      *      已知一个复杂链表,节点中有一个指向本链表任意某个节点的随机指针,求这个链表的深度拷贝
+     *
+     *  solve:
+     *      此题最难的地方在于将原链表中的random指针的关系在新链表中复现出来
+     *           原链表节点地址 -> 节点位置(第几个节点)
+     *           节点位置(第几个节点) -> 新链表节点地址
+     *
      */
     RandomListNode *copyRandomList(RandomListNode *head){
+        map<RandomListNode * , int> node_map;   //address -> node position
+        vector<RandomListNode *> node_vec;
+        RandomListNode *ptr = head;             //use vector to
+        int i = 0;
+
+        while (ptr) {           //将新链表节点push入node_vec,生成了新链表节点位置到地址的map
+            node_vec .push_back(new RandomListNode(ptr -> label));
+            node_map[ptr] = i;      // 记录原始链表地址至节点位置的node_map
+            ptr = ptr->next;
+            i ++;
+        }
+        node_vec.push_back(0);
+        ptr = head;
+        i = 0;
+        while (ptr) {               //再次便利原始列表, 连接新链表的next指针,random指针
+            node_vec[i] ->next = node_vec[i + 1] ;      //连接新链表的next指针
+            if(ptr -> random){      //当random飞空
+                int id = node_map[ptr ->random];        //according to node_map
+                node_vec[i] -> random = node_vec[id];   //原链表random指针指向的位置即id
+            }
+            ptr = ptr -> next;
+            i ++;
+        }
+        return node_vec;
+    }
+
+
+    /* LeetCode 21. Merge Two Sorted List
+     *
+     *     已知两个已排序链表头结点指针l1与l2,将这两个链表合并,合并后仍为有序的,返回合并后的头结点.
+     */
+    ListNode *mergeTwoLinkList(ListNode *l1 , ListNode *l2){
+        ListNode tem_head(0);
+        ListNode *pre = &tem_head;
+
+        while ( l1 && l2) {
+            if(l1->val < l2->val){
+                pre ->next = l1;
+                l1 = l1 ->next;
+            }else{
+                pre ->next = l2;
+                l2 - l2 ->next;
+            }
+            pre = pre ->next;
+        }
+        if(l1){
+            pre ->next = l1;
+        }
+        if(l2){
+            pre ->next = l2;
+        }
+        return tem_head.next;
 
     }
 
 
+    /* LeetCode 23. Merge k Sorted Lists
+     *
+     *      已知k个已排序链表头结点指针将k个链表合并,合并后仍为有序的,返回合并后的头结点.
+     */
+
+    /*
+       方法1: 暴力合并
+            k个链表按顺序合并k-1次
+            设有k个链表,平均每个链表有n个节点,时间复杂度:
+                (n + n) + (2n + n) + ((k - 1)n + n) = (1+2+...+k-1)n + (k-1)n = (1+2+...+k)n -n=(k^2 + k-1)/2 * n =O(k^2 *n)
+
+        方法2: 排序后相连
+            将k*n个节点放到vector中,再将vector排序,再将节点顺序相连.
+            设k个链表平均每一个链表n个节点,时间复杂度:
+                kN*logkN + kN =O(kN * logkN)
+
+        方法3: 分治后相连
+                对k个链表进行分治,两两进行合并
+                设有k个链表,平均每个链表有n个节点,时间复杂度:
+                        第一轮,进行k/2次,每次处理2个数字;第二轮,进行k/4次,每次处理4n个数字; ...;
+                        最后一次,进行k/(2^logk)次,每次处理2^log*N个值.
+                2N*k/2 + 4N*k/4 + 8N * k/8 + ... + 2^logk*N *k(2^logk)= Nk + Nk _... Nk = O(kNlogk)
+     */
+    ListNode * nergeKListNodes_sort(vector<ListNode *> &lists){
+        vector<ListNode *> node_vec;
+        for(int i = 0 ; i < lists.size(); i++){
+            ListNode *head =lists[i];
+            while (head) {
+                node_vec.push_back(head);
+                head = head ->next;
+            }
+        }
+        if(node_vec.size() == 0){
+            return NULL;
+        }
+
+        sort(node_vec.begin() , node_vec.end() , cmp);
+        for(int i = 1 ; i < node_vec.size() ; i++){     //link new linklist
+            node_vec[ i - 1] ->next = node_vec[i];
+        }
+        node_vec[node_vec.size() -1] ->next = NULL;
+        return node_vec[0];
+    }
+
+    ListNode * mergeKListNodes_dev(vector<ListNode *> &lists){
+        if(lists.size() == 0){
+            return NULL;
+        }
+        if (lists.size() == 1){
+            return lists[0];
+        }
+        if(lists.size() == 2 ){     //if there is two lists , directly call
+            return mergeTwoLinkList(lists[0] , lists[1]);
+        }
+        int mid = lists.size() / 2;
+
+        vector<ListNode *> sub1_lists;
+        vector<ListNode *> sub2_lists;
+        for(int i = 0 ; i < mid ; i++){
+            sub1_lists.push_back(lists[i]);
+        }
+        for(int i = mid ; i < lists.size() ; i++){
+            sub2_lists.push_back(lists[i]);
+        }
+
+        ListNode *l1 = mergeKListNodes_dev(sub1_lists);
+        ListNode *l2 = mergeKListNodes_dev(sub2_lists);
+
+        return mergeTwoLinkList(l1 , l2);
+
+    }
+
 };
+
+bool cmp(const ListNode *a , const ListNode *b){
+    return a->val < b->val;
+}
 
 int main(int argc, char *argv[])
 {
@@ -268,8 +418,8 @@ int main(int argc, char *argv[])
 
 
     /* test getIntersection */
-    h2->next = n2_2; n2_2 ->next = n3_2; n3_2 ->next = n3;
-    myLinklist.printNodes(h2);
+//    h2->next = n2_2; n2_2 ->next = n3_2; n3_2 ->next = n3;
+//    myLinklist.printNodes(h2);
 
 //    cout << myLinklist.getIntersectionNodeSet(h1,h2) ->val << endl;
 //    cout << myLinklist.getIntersectionNodeOn1(h1,h2) ->val << endl;
@@ -279,5 +429,9 @@ int main(int argc, char *argv[])
 //    cout << myLinklist.detectCycleFastSlowPointer(h1) ->val << endl;
 //    cout << myLinklist.detectCycleSet(h1) ->val << endl;
 
+
+    /* test partion */
+//    h1 -> next = n4; n4 ->next = n3; n3 ->next = n2; n2 ->next =n5;
+//    myLinklist.printNodes(myLinklist.partition(h1 , 3) );
     return 0;
 }
