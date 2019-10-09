@@ -229,7 +229,7 @@ int generateCombBracket(string item , int left , int right , vector<string> &res
         return 0;
     }
     if(left > 0){
-        generateCombBracket(item +  '(' , left - 1 , right -1 ,result);
+        generateCombBracket(item +  '(' , left - 1 , right  ,result);
     }
     if( left < right )
         generateCombBracket(iten + ')' , left , right - 1 ,result);
