@@ -135,9 +135,57 @@ public:
         求target是否在nums中出现,若出现返回所在下标,未出现返回-1
     */
     int search(vector<int>& nums, int target) {
+        int begin = 0;
+        int end = nums.size() = 1;
+        while (begin <= end) {
+            int mid = (begin + end) / 2;
+            if(target == nums[mid])
+                return mid;
+            else if(target < nums[mid]){
+                if(nums[begin] < nums[mid]){
+                    if(target >= nums[begin]){
+                        end = mid - 1;
+                    }else{
+                        begin = mid + 1;
+                    }
+                }else if(nums[begin] > nums[mid]){
+                    end = mid -1;
+                }
+                else if(nums[begin] == nums[mid]){
+                    begin = mid + 1;
+                }
 
+            }
+            else if(target > nums[mid]){
+                if(nums[begin] < nums[mid]){
+                    begin = mid + 1;
+                }
+                else if(nums[begin] > nums[mid]){
+                    if(target >= nums[begin]){
+                        end  = mid - 1;
+                    }
+                    else{
+                        begin = mid + 1;
+                    }
+                }
+                else if(nums[begin] == nums[mid]){
+                    begin = mid + 1;
+                }
+            }
+        }
+        return -1;
     }
 };
+
+
+/**********************************************************************************************/
+/*
+二叉查找树binary search tree ,它是一颗具有下列性质的二叉树:
+        1.若左子树不空,则左子树所有结点的值均小于等于它的根节点
+        2.若右子树不空,则右子树上所有结点的值均大于等于他的根节点值.
+        3.左右子树也分别为二叉排序树
+        4.等于的情况只出现在左子树或右子树的某一侧.
+*/
 
 
 
