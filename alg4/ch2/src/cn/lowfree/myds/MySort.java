@@ -209,8 +209,8 @@ public class MySort {
 //        insertSort(a);
 //        shellSort(a);
 //        mergeSort(a , a.length);
-//        quickSort(a , 0 , a.length -1 );
-        heapSort(a);
+        quickSort(a , 0 , a.length -1 );
+
 
         showSorted(a);
     }

@@ -69,6 +69,12 @@ public class MyPQTest {
         }
     }
 
+    private void swin (Comparable[] a , int k , int N){
+        while (k > 1 && less(a , k /2 , k)){
+            exch(a , k/2 , k);
+            k /= 2;
+        }
+    }
 
 
     @Test
@@ -87,7 +93,7 @@ public class MyPQTest {
             System.out.print( list.get(i) +  " ");
         }
         System.out.println();
-        
+
 
         heepSort(list);
         for (int i  = 1; i < list .size() ; i ++ ) {
