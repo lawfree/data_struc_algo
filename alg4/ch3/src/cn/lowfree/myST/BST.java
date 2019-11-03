@@ -68,6 +68,42 @@ public class BST <Key extends Comparable<Key> , Value > {
             return  x;
         }
 
+        /**
+         * 求而叉树中的最小键
+         * @return
+         */
+        public Key min(){
+            return min(root).key;
+        }
+        private Node min(Node x) {
+            if(x.left == null) return x;
+            return min(x.left);
+        }
+
+        /**
+         *
+         * @param x
+         * @param key
+         * @return
+         */
+        public Key floor(Key key){
+            Node x = floor(root , key);
+
+        }
+
+
+        public Node floor(Node x ,Key key){
+            if (x == null) return  null;
+            int cmp = key.compareTo(x.key);
+
+            if(cmp == 0)    return  x;
+            if(cmp < 0) return floor(x.left , key);
+
+            Node t = floor(x.right , key);
+            if(t != null) return  t;
+            else return x;
+        }
+
 
     }
 }
