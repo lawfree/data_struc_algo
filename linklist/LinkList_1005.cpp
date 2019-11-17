@@ -300,7 +300,7 @@ public:
                 l1 = l1 ->next;
             }else{
                 pre ->next = l2;
-                l2 - l2 ->next;
+                l2 = l2 ->next;
             }
             pre = pre ->next;
         }
